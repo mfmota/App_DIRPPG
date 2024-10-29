@@ -1,5 +1,5 @@
 import React ,{useState}  from 'react';
-import {Text,View,TextInput,SafeAreaView, Pressable} from 'react-native';
+import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native';
 import{styles, useGlobalFonts} from "./styles";
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { router } from 'expo-router';
@@ -15,16 +15,18 @@ import { InputView } from '~/components/InputView';
 import SelectNucleo from '~/components/SelectNucleo';
 import { Footer } from '~/components/footer/footer';
 import TXTOptions from '~/components/TXTOption';
-
+import api from '../utils/api';
 
 export default function criarLogin(){
 
+    
     const fontsLoaded = useGlobalFonts();
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const[senhaConf, setSenhaConf] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const addBd = async () =>{
         if(nome === '' ||email === '' ||senha === '' || senhaConf ==''){
@@ -36,24 +38,20 @@ export default function criarLogin(){
             alert('As senhas precisam ser iguais');
             return;
         }
-
-        else{
-
-            createUserWithEmailAndPassword(auth,email,senha)
-            .then((UserCredencial) =>{
-                const user = UserCredencial.user;    
-                updateProfile(user, {
-                    displayName:nome
-                  })
-                alert('Usuário Cadastrado');
-                router.replace('/');
-            })
-            .catch((error) =>{
-                const errorMessage = error.message;
-                alert(errorMessage);
-                router.replace('/');
-            })
-
+        try {
+            setLoading(true);
+            await api.post("/users", {
+                nome: nome,
+                email: email,
+                senha: senha,
+            });
+            Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
+            router.push('/'); // Redireciona para a página de login após o cadastro
+        } catch (error) {
+            console.error("Erro ao cadastrar usuário:", error);
+            Alert.alert('Erro', 'Erro ao cadastrar usuário');
+        } finally {
+            setLoading(false);
         }
     }
 
