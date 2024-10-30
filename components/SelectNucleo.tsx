@@ -3,9 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import {MultipleSelectList }from 'react-native-dropdown-select-list';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
+interface SelectNucleoProps {
+  onSelect: (selectedValues: string[]) => void; // Definindo o tipo da função de callback
+}
 
-
-const SelectNucleo = () => {
+const SelectNucleo: React.FC<SelectNucleoProps> = ({ onSelect }) => {
 
 const [selected, setSelected] = useState<string[]>([]); // Armazena os itens selecionados
 
@@ -35,11 +37,16 @@ const [selected, setSelected] = useState<string[]>([]); // Armazena os itens sel
     { key: '23', value: 'DIRPLAD-CT' },
   ];
 
+  const handleSelect = (val:string[]) => {
+    setSelected(val);
+    onSelect(val); // Chama a função de callback para atualizar o estado no componente pai
+};
+
   const boxHeight = selected.length > 0 ? Math.min(hp(7) + selected.length * 10, hp(8)) : hp(5);
 
   return (
       <MultipleSelectList
-        setSelected={(val: string[]) => setSelected(val)} 
+        setSelected={handleSelect} 
         data={data} 
         label="Núcleo" 
         placeholder="Núcleo" 

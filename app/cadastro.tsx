@@ -1,9 +1,7 @@
 import React ,{useState}  from 'react';
 import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native';
 import{styles, useGlobalFonts} from "./styles";
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { router } from 'expo-router';
-import{auth} from '../utils/firebase';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -17,16 +15,15 @@ import { Footer } from '~/components/footer/footer';
 import TXTOptions from '~/components/TXTOption';
 import api from '../utils/api';
 
-export default function criarLogin(){
+const Cadastro: React.FC = () => {
 
-    
     const fontsLoaded = useGlobalFonts();
-
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const[senhaConf, setSenhaConf] = useState('');
-    const [loading, setLoading] = useState(false);
+   
+        const [nome, setNome] = useState<string>('');
+        const [email, setEmail] = useState<string>('');
+        const [senha, setSenha] = useState<string>('');
+        const [senhaConf, setSenhaConf] = useState<string>('');
+        const [nucleoSelecionados, setNucleoSelecionados] = useState<string[]>([]);
 
     const addBd = async () =>{
         if(nome === '' ||email === '' ||senha === '' || senhaConf ==''){
@@ -39,21 +36,46 @@ export default function criarLogin(){
             return;
         }
         try {
-            setLoading(true);
-            await api.post("/users", {
-                nome: nome,
-                email: email,
-                senha: senha,
-            });
+                // Cadastro do usuário
+                const usuarioData = {
+                    nome: nome,
+                    email: email,
+                    senha: senha,
+                };
+    
+                const response = await api.post("/usuarios", usuarioData);
+                const usuarioId = response.data.dadosUsuario.id; // ID do usuário criado
+    
+                for (const nucleo of nucleoSelecionados) {
+                    // Verifica se o núcleo já existe
+                    const nucleoExistente = await api.get(`/nucleos?name=${nucleo}`);
+                    let nucleoId;
+                
+                    if (nucleoExistente) {
+                        // Se o núcleo já existir, pega o ID existente
+                        nucleoId = nucleoExistente.data.id; // Acessando o ID da resposta
+                    } else {
+                        // Caso contrário, cria um novo núcleo
+                        const nucleoResponse = await api.post("/nucleos", { name: nucleo });
+                        nucleoId = nucleoResponse.data.id; // ID do núcleo criado
+                    }
+                
+                    // Inserção na tabela usuarios_nucleos
+                    await api.post("/usuarios_nucleos", {
+                        id_usuario: usuarioId,
+                        id_nucleo: nucleoId,
+                    });
+                }
+
             Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
-            router.push('/'); // Redireciona para a página de login após o cadastro
+            router.push('/'); 
         } catch (error) {
-            console.error("Erro ao cadastrar usuário:", error);
+            console.error("Erro:", error);
             Alert.alert('Erro', 'Erro ao cadastrar usuário');
-        } finally {
-            setLoading(false);
-        }
+        } 
     }
+
+
 
     if (!fontsLoaded) {
         return null; 
@@ -90,7 +112,7 @@ export default function criarLogin(){
                             />
                          </InputView>
 
-                        <SelectNucleo/>
+                        <SelectNucleo  onSelect={setNucleoSelecionados}/>
                             
                         <InputView>
                             <Fontisto style={styles.iconInput}name="locked" size={17} color="black" />
@@ -130,4 +152,6 @@ export default function criarLogin(){
         </SafeAreaView>
     );
 
-}
+};
+
+export default Cadastro;

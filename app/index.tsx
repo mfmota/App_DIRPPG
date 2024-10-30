@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text,View,TextInput,SafeAreaView, Pressable} from 'react-native'
+import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native'
 import{styles,useGlobalFonts } from "./styles"
 import{auth} from '../utils/firebase'
 import {signInWithEmailAndPassword } from 'firebase/auth';
@@ -13,7 +13,7 @@ import { Background } from '~/components/Background';
 import { InputView } from '~/components/InputView';
 import { Footer } from '~/components/footer/footer';
 import TXTOptions from '~/components/TXTOption';
-
+import api from '../utils/api';
 
 export default function Login(){
 
@@ -22,9 +22,32 @@ export default function Login(){
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const router= useRouter();
+    const [loading, setLoading] = useState(false);
+    const userLogin = async () => {
+        
+        try {
+        setLoading(true);
+        
+        // Realizar a requisição de login ao backend
+        const response = await api.post("/usuarios/login", {
+            email: email,
+            senha: senha,
+        });
+        
+        // Se o login for bem-sucedido, redirecione o usuário
+        if (response.status === 200) {
+            router.push('../(tabs)/calendario'); // Redireciona para a página do calendário
+        }
+        } catch (error) {
+            console.error("Erro ao realizar login:", error);
+            Alert.alert('Erro', 'Email ou senha incorretos');
+        } finally {
+            setLoading(false);
+        }
+    }
+        
 
-    function userLogin(){
-        signInWithEmailAndPassword(auth,email,senha)
+        /*signInWithEmailAndPassword(auth,email,senha)
         .then((userCredential) =>{
             const user = userCredential.user;
             router.replace('../(tabs)/calendario');
@@ -33,9 +56,8 @@ export default function Login(){
             const errorCode = error.code;
             const errorMessage= error.message;
             alert(errorMessage);
-        })
+        })*/
             
-        }
 
     function cadastro(){
         router.replace('/cadastro');
