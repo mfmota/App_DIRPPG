@@ -19,11 +19,11 @@ const Cadastro: React.FC = () => {
 
     const fontsLoaded = useGlobalFonts();
    
-        const [nome, setNome] = useState<string>('');
-        const [email, setEmail] = useState<string>('');
-        const [senha, setSenha] = useState<string>('');
-        const [senhaConf, setSenhaConf] = useState<string>('');
-        const [nucleoSelecionados, setNucleoSelecionados] = useState<string[]>([]);
+    const [nome, setNome] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [senha, setSenha] = useState<string>('');
+    const [senhaConf, setSenhaConf] = useState<string>('');
+    const [nucleoSelecionados, setNucleoSelecionados] = useState<string[]>([]);
 
     const addBd = async () =>{
         if(nome === '' ||email === '' ||senha === '' || senhaConf ==''){
@@ -36,36 +36,29 @@ const Cadastro: React.FC = () => {
             return;
         }
         try {
-                // Cadastro do usuário
-                const usuarioData = {
-                    nome: nome,
-                    email: email,
-                    senha: senha,
-                };
+            const usuarioData = {
+                nome: nome,
+                email: email,
+                senha: senha,
+            };
     
-                const response = await api.post("/usuarios", usuarioData);
-                const usuarioId = response.data.dadosUsuario.id; // ID do usuário criado
-    
-                for (const nucleo of nucleoSelecionados) {
-                    // Verifica se o núcleo já existe
-                    const nucleoExistente = await api.get(`/nucleos?name=${nucleo}`);
-                    let nucleoId;
-                
-                    if (nucleoExistente) {
-                        // Se o núcleo já existir, pega o ID existente
-                        nucleoId = nucleoExistente.data.id; // Acessando o ID da resposta
-                    } else {
-                        // Caso contrário, cria um novo núcleo
-                        const nucleoResponse = await api.post("/nucleos", { name: nucleo });
-                        nucleoId = nucleoResponse.data.id; // ID do núcleo criado
-                    }
-                
-                    // Inserção na tabela usuarios_nucleos
-                    await api.post("/usuarios_nucleos", {
-                        id_usuario: usuarioId,
+            const response = await api.post("/usuarios", usuarioData);
+            const usuarioId = response.data.dadosUsuario.id; 
+            
+            for (const nucleo of nucleoSelecionados) {
+                try {
+                    const nucleoResponse = await api.post("/nucleos", { nome: nucleo });
+                    const nucleoId = nucleoResponse.data.id;
+                    
+
+                    /*await api.post("/usuarios_nucleos", {
+                        id_usuarios: usuarioId,
                         id_nucleo: nucleoId,
-                    });
+                    });*/
+                } catch (error) {
+                    console.error("Erro ao cadastrar núcleo:", error);
                 }
+            }
 
             Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
             router.push('/'); 

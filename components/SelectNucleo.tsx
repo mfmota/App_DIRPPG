@@ -9,7 +9,7 @@ interface SelectNucleoProps {
 
 const SelectNucleo: React.FC<SelectNucleoProps> = ({ onSelect }) => {
 
-const [selected, setSelected] = useState<string[]>([]); // Armazena os itens selecionados
+const [selected, setSelected] = useState<string[]>([]); 
 
   const data = [
     { key: '1', value: 'DIRPPG-CT' },
@@ -37,16 +37,26 @@ const [selected, setSelected] = useState<string[]>([]); // Armazena os itens sel
     { key: '23', value: 'DIRPLAD-CT' },
   ];
 
-  const handleSelect = (val:string[]) => {
+  const handleSelect = (val: string[]) => {
     setSelected(val);
-    onSelect(val); // Chama a função de callback para atualizar o estado no componente pai
-};
+    const itens: string[] = [];
+
+    for (let i = 0; i < val.length; i++) {
+      const foundItem = data.find(item => item.key === val[i]);
+      if (foundItem) {
+        itens.push(foundItem.value);
+      }
+    }
+    onSelect(itens);
+  };
+  
 
   const boxHeight = selected.length > 0 ? Math.min(hp(7) + selected.length * 10, hp(8)) : hp(5);
 
   return (
       <MultipleSelectList
-        setSelected={handleSelect} 
+        setSelected={(val: string[])=>setSelected(val)} 
+        onSelect={()=>handleSelect(selected)}
         data={data} 
         label="Núcleo" 
         placeholder="Núcleo" 
