@@ -35,6 +35,7 @@ const Cadastro: React.FC = () => {
             alert('As senhas precisam ser iguais');
             return;
         }
+        
         try {
             const usuarioData = {
                 nome: nome,
@@ -44,28 +45,23 @@ const Cadastro: React.FC = () => {
     
             const response = await api.post("/usuarios", usuarioData);
             const usuarioId = response.data.dadosUsuario.id; 
-            
-            for (const nucleo of nucleoSelecionados) {
-                try {
-                    const nucleoResponse = await api.post("/nucleos", { nome: nucleo });
-                    const nucleoId = nucleoResponse.data.id;
-                    
 
-                    /*await api.post("/usuarios_nucleos", {
-                        id_usuarios: usuarioId,
-                        id_nucleo: nucleoId,
-                    });*/
+            for (const nucleo of nucleoSelecionados) {
+                const idNucleo = parseInt(nucleo); 
+                try {
+                    await api.post("/usuarios_nucleos", {usuario_id: usuarioId,nucleo_id: idNucleo,});
                 } catch (error) {
-                    console.error("Erro ao cadastrar núcleo:", error);
+                    console.error("Erro ao cadastrar nucleo_usuario:", error);
                 }
             }
-
+            
             Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
             router.push('/'); 
         } catch (error) {
             console.error("Erro:", error);
             Alert.alert('Erro', 'Erro ao cadastrar usuário');
-        } 
+        }     
+        
     }
 
 

@@ -39,15 +39,7 @@ const [selected, setSelected] = useState<string[]>([]);
 
   const handleSelect = (val: string[]) => {
     setSelected(val);
-    const itens: string[] = [];
-
-    for (let i = 0; i < val.length; i++) {
-      const foundItem = data.find(item => item.key === val[i]);
-      if (foundItem) {
-        itens.push(foundItem.value);
-      }
-    }
-    onSelect(itens);
+    onSelect(val); 
   };
   
 
