@@ -1,5 +1,5 @@
 import React ,{useState}  from 'react';
-import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native';
+import {Text,View,TextInput,SafeAreaView,Alert} from 'react-native';
 import{styles, useGlobalFonts} from "./styles";
 import { router } from 'expo-router';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -63,8 +63,6 @@ const Cadastro: React.FC = () => {
         }     
         
     }
-
-
 
     if (!fontsLoaded) {
         return null; 

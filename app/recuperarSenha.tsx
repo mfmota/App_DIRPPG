@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import {Text,View,TextInput,SafeAreaView, Pressable} from 'react-native';
 import{styles,useGlobalFonts } from "./styles";
 import { useRouter } from 'expo-router';
-import{auth} from '../utils/firebase';
-import { sendPasswordResetEmail } from 'firebase/auth';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Button } from '~/components/Button';
@@ -12,6 +10,7 @@ import { Background } from '~/components/Background';
 import { Footer } from '~/components/footer/footer';
 import { InputView } from '~/components/InputView';
 import TXTOptions from '~/components/TXTOption';
+import api from '../utils/api';
 
 export default function recuperarSenha(){
 
@@ -20,26 +19,14 @@ export default function recuperarSenha(){
     const [email, setEmail] = useState('');
     const router = useRouter();
 
-
-
-    function redefinirSenha(){
-        if(email !== ''){
-            sendPasswordResetEmail(auth,email)
-            .then(()=>{
-                alert('Email enviado, confira sua caixa de entrada');
-                router.replace('/');   
-            })
-
-            .catch((error) =>{
-                const errorMessage= error.message;
-                alert('Erro: '+errorMessage+' Tente Novamente');
-                return;
-            }) 
+   
+    async function solicitarRedefinicaoSenha() {
+        try {
+            const response = await api.post("/request-redefinicao", { email:email });
+            alert(response.data.mensagem); 
+        } catch (error) {
+            console.log('Erro ao solicitar redefinição de senha: ' + error);
         }
-        else{
-            alert('informe o email');
-        }
-      
     }
 
     if (!fontsLoaded) {
@@ -73,7 +60,7 @@ export default function recuperarSenha(){
                         
                         <Button
                         title='Enviar'
-                        onPress={redefinirSenha}
+                        onPress={solicitarRedefinicaoSenha}
                         style={{width:'35%'}}
                         />
                         <TXTOptions

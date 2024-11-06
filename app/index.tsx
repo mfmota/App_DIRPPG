@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native'
 import{styles,useGlobalFonts } from "./styles"
-import{auth} from '../utils/firebase'
-import {signInWithEmailAndPassword } from 'firebase/auth';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {useRouter} from 'expo-router'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -23,20 +21,19 @@ export default function Login(){
     const [senha, setSenha] = useState('');
     const router= useRouter();
     const [loading, setLoading] = useState(false);
+
     const userLogin = async () => {
         
         try {
         setLoading(true);
         
-        // Realizar a requisição de login ao backend
         const response = await api.post("/usuarios/login", {
             email: email,
             senha: senha,
         });
         
-        // Se o login for bem-sucedido, redirecione o usuário
         if (response.status === 200) {
-            router.push('../(tabs)/calendario'); // Redireciona para a página do calendário
+            router.push('../(tabs)/calendario');
         }
         } catch (error) {
             console.error("Erro ao realizar login:", error);
@@ -45,20 +42,8 @@ export default function Login(){
             setLoading(false);
         }
     }
-        
-
-        /*signInWithEmailAndPassword(auth,email,senha)
-        .then((userCredential) =>{
-            const user = userCredential.user;
-            router.replace('../(tabs)/calendario');
-        })
-        .catch((error) =>{
-            const errorCode = error.code;
-            const errorMessage= error.message;
-            alert(errorMessage);
-        })*/
+    
             
-
     function cadastro(){
         router.replace('/cadastro');
     }    
