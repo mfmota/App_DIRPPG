@@ -26,13 +26,19 @@ export default function Editais() {
     const [searchText, setSearchText] = useState<string>('');
     const [userNucleos, setUserNucleos] = useState<string[]>([]); // Guardar os IDs dos núcleos do usuário
     const { top, bottom } = useSafeAreaInsets();
-    const getUserId = async () => {
-        const userId = await SecureStore.getItemAsync('userId');
-        return userId;
-      };
-    const userId = getUserId();  
+    const [userId, setUserId] = useState<string | null>(null);
 
-    console.log(userId); 
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const id = await SecureStore.getItemAsync('userId');
+                setUserId(id);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchUserId();
+    }, []);
     
     // Função para buscar os núcleos do usuário
     const fetchUserNucleos = async (userId: string) => {

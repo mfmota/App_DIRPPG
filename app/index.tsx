@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native'
 import{styles,useGlobalFonts } from "./styles"
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -33,9 +33,20 @@ export default function Login(){
         });
         
         if (response.status === 200) {
-            const storeUserId = async (userId: string) => {
-                await SecureStore.setItemAsync('userId', userId);
-              };
+
+            const userResponse = await api.get("/usuarios", {
+                params:{email:email}
+            });
+
+           if (userResponse.status === 200 && userResponse.data) {
+
+                const userId = userResponse.data.usuario; 
+                await SecureStore.setItemAsync('userId', userId.toString())
+                router.push('../(tabs)/calendario');
+
+            } else {
+                throw new Error("Erro ao buscar o ID do usuário");
+            }
             router.push('../(tabs)/calendario');
         }
         } catch (error) {
