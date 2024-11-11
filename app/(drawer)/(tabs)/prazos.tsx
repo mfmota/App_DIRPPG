@@ -98,11 +98,11 @@ export default function prazos (){
         const diferencaDias = differenceInDays(dataFim, hoje);
     
         if (diferencaDias <= 1) {
-            return '#ff3131'; // Vermelho para eventos que terminam em 1 dia
+            return '#ff3131'; 
         } else if (diferencaDias <= 3) {
-            return '#ff914d'; // Laranja para eventos que terminam em até 3 dias
+            return '#ff914d'; 
         } else if (diferencaDias <= 5) {
-            return '#ffbd59'; // Amarelo para eventos que terminam em até 5 dias
+            return '#ffbd59'; 
         } 
     };
 
@@ -148,7 +148,7 @@ export default function prazos (){
                     <Text style={[styles.prazosTitle,{marginTop:'10%'}]}>Atenção para os eventos </Text>
                     <Text style={styles.prazosTitle}>que se aproximam </Text>
 
-                    <View style={[styles.boxMiddle,{justifyContent:'center'}]}>
+                    <View style={[styles.boxMiddle,{justifyContent:'center',height:'100%'}]}>
                         <FlatList
                                 style={{marginTop:'10%'}}
                                 data={eventos}

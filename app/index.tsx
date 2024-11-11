@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native'
 import{styles,useGlobalFonts } from "./styles"
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -10,13 +10,13 @@ import { Container } from '~/components/Container';
 import { Background } from '~/components/Background';
 import { InputView } from '~/components/InputView';
 import { Footer } from '~/components/footer/footer';
-import TXTOptions from '~/components/TXTOption';
+import TXTOptions from '~/components/TXTOption'; 
 import api from '../utils/api';
+import * as SecureStore from 'expo-secure-store';
 
 export default function Login(){
 
     const fontsLoaded = useGlobalFonts();
-
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const router= useRouter();
@@ -33,6 +33,9 @@ export default function Login(){
         });
         
         if (response.status === 200) {
+            const storeUserId = async (userId: string) => {
+                await SecureStore.setItemAsync('userId', userId);
+              };
             router.push('../(tabs)/calendario');
         }
         } catch (error) {
@@ -59,59 +62,59 @@ export default function Login(){
     return(
         <SafeAreaView>
             <Background>
-                <Container>
-                    <View style={[styles.boxTop,{ height:hp(20),}]}>
-                        <Text style={styles.title} >DIRPPG-CT</Text>  
-                        <Text style={styles.subTitle}>Diretoria de Pesquisa e Pós-Graduação</Text>             
-                    </View>
+                    <Container>
+                        <View style={[styles.boxTop,{ height:hp(20),}]}>
+                            <Text style={styles.title} >DIRPPG-CT</Text>  
+                            <Text style={styles.subTitle}>Diretoria de Pesquisa e Pós-Graduação</Text>             
+                        </View>
 
-                    <View style={[styles.boxMiddle,{height:hp(25)}]}>
-                        <Text style={styles.txtLogin}>Login</Text>  
-                        <InputView >
-                            <MaterialIcons style={styles.iconInput}name="email" size={18} color="black" />
-                            <TextInput 
-                            style={styles.input}
-                            placeholder=" | Email"
-                            keyboardType='email-address'
-                            autoComplete='email'
-                            value={email}
-                            onChangeText={setEmail}
+                        <View style={[styles.boxMiddle,{height:hp(25)}]}>
+                            <Text style={styles.txtLogin}>Login</Text>  
+                            <InputView >
+                                <MaterialIcons style={styles.iconInput}name="email" size={18} color="black" />
+                                <TextInput 
+                                style={styles.input}
+                                placeholder=" | Email"
+                                keyboardType='email-address'
+                                autoComplete='email'
+                                value={email}
+                                onChangeText={setEmail}
+                                />
+                            </InputView>
+
+                            <InputView>
+                                <Fontisto style={styles.iconInput}name="locked" size={16} color="black" />
+                                <TextInput style={styles.input}  
+                                    placeholder=" | Senha"
+                                    autoCapitalize='none'
+                                    secureTextEntry
+                                    value={senha}
+                                    onChangeText={setSenha}
+                                />
+                            </InputView>
+
+                            <Pressable onPress={redefinirSenha}>
+                                <Text style={styles.txtSenha}>Esqueci minha senha</Text>
+                            </Pressable>   
+
+                        </View>
+
+                        <View style={[styles.boxBottom,{height:hp(20)}]}>
+                            <Button
+                            title='Entrar'
+                            onPress={userLogin}
                             />
-                        </InputView>
 
-                        <InputView>
-                            <Fontisto style={styles.iconInput}name="locked" size={16} color="black" />
-                            <TextInput style={styles.input}  
-                                placeholder=" | Senha"
-                                autoCapitalize='none'
-                                secureTextEntry
-                                value={senha}
-                                onChangeText={setSenha}
-                            />
-                        </InputView>
-
-                        <Pressable onPress={redefinirSenha}>
-                            <Text style={styles.txtSenha}>Esqueci minha senha</Text>
-                        </Pressable>   
-
-                    </View>
-
-                    <View style={[styles.boxBottom,{height:hp(20)}]}>
-                        <Button
-                        title='Entrar'
-                        onPress={userLogin}
+                        <TXTOptions
+                        title1='Não tem uma conta?'
+                        title2='Cadastre-se'
+                        onPress={cadastro}
                         />
 
-                       <TXTOptions
-                       title1='Não tem uma conta?'
-                       title2='Cadastre-se'
-                       onPress={cadastro}
-                       />
+                        </View>
 
-                    </View>
-
-                   <Footer/>
-                </Container>   
+                    <Footer/>
+                    </Container>   
             </Background>
         </SafeAreaView>
         

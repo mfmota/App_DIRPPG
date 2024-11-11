@@ -3,8 +3,12 @@
     "name": "appCalendario",
     "slug": "appCalendario",
     "version": "1.0.0",
-    "scheme": "appcalendario",
-    "platforms": ["ios", "android", "web"],  
+    "scheme": "appCalendario",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
@@ -20,6 +24,9 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.appCalendario"
-    }
+    },
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
