@@ -50,13 +50,11 @@ export default function Login(){
             router.push('../(tabs)/calendario');
         }
         } catch (error) {
-            console.error("Erro ao realizar login:", error);
-            Alert.alert('Erro', 'Email ou senha incorretos');
+            Alert.alert('Email ou senha incorretos');
         } finally {
             setLoading(false);
         }
     }
-    
             
     function cadastro(){
         router.replace('/cadastro');

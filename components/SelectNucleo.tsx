@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {MultipleSelectList }from 'react-native-dropdown-select-list';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 interface SelectNucleoProps {
-  onSelect: (selectedValues: string[]) => void; // Definindo o tipo da função de callback
+  onSelect: (selectedValues: string[]) => void; 
 }
 
 const SelectNucleo: React.FC<SelectNucleoProps> = ({ onSelect }) => {

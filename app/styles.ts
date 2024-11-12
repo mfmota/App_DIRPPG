@@ -139,7 +139,6 @@ export const styles = StyleSheet.create({
         overflow:'hidden'
     },
 
-    
     filterButton: {
         borderRadius: 5,
         backgroundColor:'#e8ebfa',
@@ -150,7 +149,7 @@ export const styles = StyleSheet.create({
     inputViewAgenda:{
         flexDirection:'row',
         justifyContent:'space-between',
-        height: '60%',
+        height: '65%',
         width:'75%',
         borderRadius:20,
         backgroundColor:'#e8ebfa',  
@@ -172,12 +171,9 @@ export const styles = StyleSheet.create({
 
     dropdown: {
         backgroundColor: '#fff',
-        alignSelf:'flex-start',
         borderRadius: 5,
-        position:'absolute',
-        top:'80%',
-        left:'5%',
-        zIndex:999
+        marginTop:10,
+        padding:10,
     },
 
     filterText: {
@@ -204,7 +200,7 @@ export const styles = StyleSheet.create({
 
     item: {
         padding:10,
-        marginBottom:10,
+        marginBottom:20,
         width:'90%',
         alignSelf:'center',
         alignContent:'center',
@@ -216,17 +212,6 @@ export const styles = StyleSheet.create({
     list:{
         flexDirection:'row', 
         justifyContent:'space-between'
-    },
-   
-    txtDetalhes:{
-        borderBottomColor:'#ddd',
-        borderBottomWidth:1,
-        flexDirection:'row', 
-        alignItems:'center',
-        justifyContent:'space-between',
-        color:'black',
-        paddingTop:'5%'
-        
     },
 
 //--------------------------------------PRAZOS------------------------------------------------------- 

@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router';
 import {Header} from '../../../components/header/header';
 import { Background } from '~/components/Background';
 import { ContainerDrawer } from '~/components/ContainerDrawer';
+import * as SecureStore from 'expo-secure-store';
 
 export type Evento = {
     id:string;
@@ -30,8 +31,12 @@ export default function prazos (){
 
     useEffect(  () => {
 
-        const starCountRef = ref(db);
+        const carregarEditais = async () =>{
+            const editais =  await SecureStore.getItemAsync('editais');
+        };
 
+        const starCountRef = ref(db);
+        
         const unsubscribe = onValue(starCountRef, (snapshot) => 
         {
             const data = snapshot.val();
@@ -54,7 +59,7 @@ export default function prazos (){
                 const eventosFiltrados = eventosList.filter(evento => {
                     const dataFim = new Date(evento.dataDoFim);
                     const diferencaDias = differenceInDays(dataFim, hoje);
-                    return diferencaDias <= 5 && diferencaDias >= 0; // Eventos com dataDoFim em até 5 dias.
+                    return diferencaDias <= 5 && diferencaDias >= 0; 
                 });
 
                 const eventosOrdenados = eventosFiltrados.sort((a, b) => {
