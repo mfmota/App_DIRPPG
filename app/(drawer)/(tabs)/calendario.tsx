@@ -34,7 +34,7 @@ export default function Editais() {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const id = await SecureStore.getItemAsync('userId');
+                const id = await SecureStore.getItemAsync('id');
                 setUserId(id);
             } catch (error) {
                 console.error(error);
@@ -53,6 +53,7 @@ export default function Editais() {
                     setUserNucleos(response.data);
 
                     await SecureStore.setItemAsync('nucleos',JSON.stringify(response.data))
+                    
                 } catch (error) {
                     setEditais([]);
                     console.error("Erro ao buscar núcleos do usuário", error);

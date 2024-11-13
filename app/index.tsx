@@ -36,12 +36,17 @@ export default function Login(){
 
             const userResponse = await api.get("/usuarios", {
                 params:{email:email}
-            });
+            }); 
 
            if (userResponse.status === 200 && userResponse.data) {
 
-                const userId = userResponse.data.usuario; 
-                await SecureStore.setItemAsync('userId', userId.toString())
+                const userId = userResponse.data.usuario.id; 
+                const nome = userResponse.data.usuario.nome; 
+                
+                await SecureStore.setItemAsync('id', userId.toString());
+                await SecureStore.setItemAsync('nome', nome);
+                await SecureStore.setItemAsync('email', email);
+                
                 router.push('../(tabs)/calendario');
 
             } else {

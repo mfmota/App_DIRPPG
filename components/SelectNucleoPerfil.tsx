@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
-import { StyleSheet} from 'react-native';
-import {MultipleSelectList }from 'react-native-dropdown-select-list';
-
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import { MultipleSelectList } from 'react-native-dropdown-select-list';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 interface SelectNucleoProps {
   onSelect: (selectedValues: string[]) => void; 
+  selectedValues: (string | number)[];
 }
 
-const SelectNucleo: React.FC<SelectNucleoProps> = ({ onSelect }) => {
+const SelectNucleoPerfil: React.FC<SelectNucleoProps> = ({ onSelect, selectedValues }) => {
+    const [selected, setSelected] = useState<string[]>(selectedValues.map(String));
 
-  const [selected, setSelected] = useState<string[]>([]); 
+  useEffect(() => {
+    setSelected(selectedValues.map(String));
+  }, [selectedValues]);
 
   const handleSelect = (val: string[]) => {
     setSelected(val);
     onSelect(val); 
   };
 
+  console.log(selected);
+  
   const data = [
     { key: '1', value: 'DIRPPG-CT' },
     { key: '2', value: 'PROPPG' },
@@ -43,30 +48,22 @@ const SelectNucleo: React.FC<SelectNucleoProps> = ({ onSelect }) => {
     { key: '23', value: 'DIRPLAD-CT' },
   ];
 
-  
-  const handleRemoveItem = (itemToRemove: string) => {
-    setSelected(selected.filter((item) => item !== itemToRemove));
-  };
-
-  const boxHeight = selected.length > 0 ? Math.min(hp(7) + selected.length * 10, hp(8)) : hp(5);
+  const boxHeight = selected.length > 0 ? Math.min(hp(7) + selected.length * 30, hp(8)) : hp(5);
 
   return (
-        <MultipleSelectList
-          setSelected={(val: string[])=>setSelected(val)} 
-          onSelect={()=>handleSelect(selected)}
-          data={data} 
-          label="Núcleo" 
-          placeholder="Núcleo" 
-          searchPlaceholder="Pesquise" 
-          labelStyles={styles.label} 
-          boxStyles={{...styles.box, minHeight:boxHeight}} 
-          dropdownStyles={styles.drop} 
-          defaultOption={{ key:'1', value:'DIRPPG-CT' }}
-        /> 
+    <MultipleSelectList
+      setSelected={(val: string[]) => handleSelect(val)} 
+      data={data}
+      label="Núcleo" 
+      placeholder="Núcleo" 
+      searchPlaceholder="Pesquise" 
+      labelStyles={styles.label} 
+      boxStyles={{ ...styles.box, minHeight: boxHeight }} 
+      dropdownStyles={styles.drop} 
+      defaultOption={{ key:'1', value:'DIRPPG-CT' }}
+    />
   );
 };
-
-
 
 const styles = StyleSheet.create({
     label:{
@@ -102,6 +99,6 @@ const styles = StyleSheet.create({
       color:'red',
       marginLeft:5,
     },
-  });
-  
-  export default SelectNucleo;
+});
+
+export default SelectNucleoPerfil;
