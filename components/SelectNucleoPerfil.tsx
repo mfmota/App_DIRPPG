@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { MultipleSelectList } from 'react-native-dropdown-select-list';
+import CustomMultiPicker from 'react-native-multiple-select-list';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 interface SelectNucleoProps {
@@ -9,11 +9,8 @@ interface SelectNucleoProps {
 }
 
 const SelectNucleoPerfil: React.FC<SelectNucleoProps> = ({ onSelect, selectedValues }) => {
-    const [selected, setSelected] = useState<string[]>(selectedValues.map(String));
-
-  useEffect(() => {
-    setSelected(selectedValues.map(String));
-  }, [selectedValues]);
+  
+  const [selected, setSelected] = useState<string[]>(selectedValues.map(String));
 
   const handleSelect = (val: string[]) => {
     setSelected(val);
@@ -22,45 +19,47 @@ const SelectNucleoPerfil: React.FC<SelectNucleoProps> = ({ onSelect, selectedVal
 
   console.log(selected);
   
-  const data = [
-    { key: '1', value: 'DIRPPG-CT' },
-    { key: '2', value: 'PROPPG' },
-    { key: '3', value: 'CPGEI' },
-    { key: '4', value: 'PPGA' },
-    { key: '5', value: 'PPGCA' },
-    { key: '6', value: 'PPGCTA' },
-    { key: '7', value: 'PPGEB' },
-    { key: '8', value: 'PPGEC' },
-    { key: '9', value: 'PPGEF' },
-    { key: '10', value: 'PPGEL' },
-    { key: '11', value: 'PPGEM' },
-    { key: '12', value: 'PPGEFA' },
-    { key: '13', value: 'FCET' },
-    { key: '14', value: 'PGP' },
-    { key: '15', value: 'PPGQ' },
-    { key: '16', value: 'PPGSAU' },
-    { key: '17', value: 'PPGSE' },
-    { key: '18', value: 'PPGTE' },
-    { key: '19', value: 'PROFMAT' },
-    { key: '20', value: 'PROFIAP' },
-    { key: '21', value: 'DIREC-CT' },
-    { key: '22', value: 'DIRGE-CT' },
-    { key: '23', value: 'DIRPLAD-CT' },
-  ];
+  const data = {
+    '1': 'DIRPPG-CT' ,
+    '2': 'PROPPG' ,
+    '3': 'CPGEI' ,
+    '4': 'PPGA' ,
+    '5': 'PPGCA' ,
+    '6': 'PPGCTA' ,
+    '7': 'PPGEB' ,
+    '8': 'PPGEC' ,
+    '9': 'PPGEF' ,
+    '10': 'PPGEL' ,
+    '11': 'PPGEM' ,
+    '12': 'PPGEFA' ,
+    '13': 'FCET' ,
+    '14': 'PGP' ,
+    '15': 'PPGQ' ,
+    '16': 'PPGSAU' ,
+    '17': 'PPGSE' ,
+    '18': 'PPGTE' ,
+    '19': 'PROFMAT' ,
+    '20': 'PROFIAP' ,
+    '21': 'DIREC-CT' ,
+    '22': 'DIRGE-CT' ,
+    '23': 'DIRPLAD-CT' ,
+  };
 
   const boxHeight = selected.length > 0 ? Math.min(hp(7) + selected.length * 30, hp(8)) : hp(5);
 
   return (
-    <MultipleSelectList
-      setSelected={(val: string[]) => handleSelect(val)} 
-      data={data}
-      label="Núcleo" 
-      placeholder="Núcleo" 
-      searchPlaceholder="Pesquise" 
-      labelStyles={styles.label} 
-      boxStyles={{ ...styles.box, minHeight: boxHeight }} 
-      dropdownStyles={styles.drop} 
-      defaultOption={{ key:'1', value:'DIRPPG-CT' }}
+    <CustomMultiPicker
+      options={data}
+      search={true}
+      multiple={true}
+      placeholder="Núcleos"
+      returnValue={"value"}
+      callback={(val: string[]) => handleSelect(val)} 
+      rowBackgroundColor={"#e8ebfa"}
+      rowHeight={40}
+      rowRadius={5}
+      scrollViewHeight={50}
+      selected={[selected]}
     />
   );
 };
