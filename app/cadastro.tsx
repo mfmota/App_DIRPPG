@@ -10,7 +10,7 @@ import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Background } from '~/components/Background';
 import { InputView } from '~/components/InputView';
-import SelectNucleo from '~/components/SelectNucleo';
+import CustomDropdown from '~/components/CustomDropdown';
 import { Footer } from '~/components/footer/footer';
 import TXTOptions from '~/components/TXTOption';
 import api from '../utils/api';
@@ -24,6 +24,32 @@ const Cadastro: React.FC = () => {
     const [senha, setSenha] = useState<string>('');
     const [senhaConf, setSenhaConf] = useState<string>('');
     const [nucleoSelecionados, setNucleoSelecionados] = useState<string[]>([]);
+
+    const data = [
+        { id: '1', name: 'DIRPPG-CT' },
+        { id: '2', name: 'PROPPG' },
+        { id: '3', name: 'CPGEI' },
+        { id: '4', name: 'PPGA' },
+        { id: '5', name: 'PPGCA' },
+        { id: '6', name: 'PPGCTA' },
+        { id: '7', name: 'PPGEB' },
+        { id: '8', name: 'PPGEC' },
+        { id: '9', name: 'PPGEF' },
+        { id: '10', name: 'PPGEL' },
+        { id: '11', name: 'PPGEM' },
+        { id: '12', name: 'PPGEFA' },
+        { id: '13', name: 'FCET' },
+        { id: '14', name: 'PGP' },
+        { id: '15', name: 'PPGQ' },
+        { id: '16', name: 'PPGSAU' },
+        { id: '17', name: 'PPGSE' },
+        { id: '18', name: 'PPGTE' },
+        { id: '19', name: 'PROFMAT' },
+        { id: '20', name: 'PROFIAP' },
+        { id: '21', name: 'DIREC-CT' },
+        { id: '22', name: 'DIRGE-CT' },
+        { id: '23', name: 'DIRPLAD-CT' },
+      ];
 
     const addBd = async () =>{
         if(nome === '' ||email === '' ||senha === '' || senhaConf ==''){
@@ -99,7 +125,11 @@ const Cadastro: React.FC = () => {
                             />
                          </InputView>
 
-                        <SelectNucleo  onSelect={setNucleoSelecionados}/>
+                        <CustomDropdown
+                        data={data}
+                        selectedValues={nucleoSelecionados}
+                        onSelect={setNucleoSelecionados}
+                        />
                             
                         <InputView>
                             <Fontisto style={styles.iconInput}name="locked" size={17} color="black" />
