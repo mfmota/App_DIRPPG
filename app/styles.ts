@@ -50,7 +50,6 @@ export const styles = StyleSheet.create({
         position:'relative',
     },
 
-    //---------------------------------Geral------------------------------
 
     title:{
         fontSize:40,
@@ -66,12 +65,18 @@ export const styles = StyleSheet.create({
     },
 
     input:{
-        marginLeft:'2%'
+        marginLeft:'2%',
+        width:'70%'
     },
 
     iconInput:{
         alignSelf:'center',
         marginLeft:'6%'
+    },
+
+    secondIcon:{
+        alignSelf:'center',
+        marginRight:'10%',
     },
 
 //--------------------------------Index-----------------------------------

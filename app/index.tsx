@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import {Text,View,TextInput,SafeAreaView, Pressable,Alert} from 'react-native'
+import {Text,View,TextInput,SafeAreaView, Pressable,Alert,TouchableOpacity} from 'react-native'
 import{styles,useGlobalFonts } from "./styles"
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {useRouter} from 'expo-router'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import Feather from '@expo/vector-icons/Feather';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Background } from '~/components/Background';
@@ -21,6 +22,9 @@ export default function Login(){
     const [senha, setSenha] = useState('');
     const router= useRouter();
     const [loading, setLoading] = useState(false);
+    const [showSenha, setShowSenha] = useState<boolean>(false);
+
+    const toggleSenhaVisibility = () => setShowSenha((prev) => !prev);
 
     const userLogin = async () => {
         
@@ -101,10 +105,13 @@ export default function Login(){
                                 <TextInput style={styles.input}  
                                     placeholder=" | Senha"
                                     autoCapitalize='none'
-                                    secureTextEntry
+                                    secureTextEntry={!showSenha}
                                     value={senha}
                                     onChangeText={setSenha}
                                 />
+                                <TouchableOpacity style={{alignSelf:'center'}} onPress={toggleSenhaVisibility}>
+                                    <Feather style={styles.secondIcon} name={showSenha ? 'eye-off' : 'eye'}size={18} color="black"/>
+                                </TouchableOpacity>
                             </InputView>
 
                             <Pressable onPress={redefinirSenha}>

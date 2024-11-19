@@ -1,11 +1,12 @@
 import React ,{useState}  from 'react';
-import {Text,View,TextInput,SafeAreaView,Alert} from 'react-native';
+import {Text,View,TextInput,SafeAreaView,Alert,TouchableOpacity,} from 'react-native';
 import{styles, useGlobalFonts} from "./styles";
 import { router } from 'expo-router';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
+import Feather from '@expo/vector-icons/Feather';
 import { Button } from '~/components/Button';
 import { Container } from '~/components/Container';
 import { Background } from '~/components/Background';
@@ -24,32 +25,12 @@ const Cadastro: React.FC = () => {
     const [senha, setSenha] = useState<string>('');
     const [senhaConf, setSenhaConf] = useState<string>('');
     const [nucleoSelecionados, setNucleoSelecionados] = useState<string[]>([]);
+    
+    const [showSenha, setShowSenha] = useState<boolean>(false);
+    const [showSenhaConf, setShowSenhaConf] = useState<boolean>(false);
 
-    const data = [
-        { id: '1', name: 'DIRPPG-CT' },
-        { id: '2', name: 'PROPPG' },
-        { id: '3', name: 'CPGEI' },
-        { id: '4', name: 'PPGA' },
-        { id: '5', name: 'PPGCA' },
-        { id: '6', name: 'PPGCTA' },
-        { id: '7', name: 'PPGEB' },
-        { id: '8', name: 'PPGEC' },
-        { id: '9', name: 'PPGEF' },
-        { id: '10', name: 'PPGEL' },
-        { id: '11', name: 'PPGEM' },
-        { id: '12', name: 'PPGEFA' },
-        { id: '13', name: 'FCET' },
-        { id: '14', name: 'PGP' },
-        { id: '15', name: 'PPGQ' },
-        { id: '16', name: 'PPGSAU' },
-        { id: '17', name: 'PPGSE' },
-        { id: '18', name: 'PPGTE' },
-        { id: '19', name: 'PROFMAT' },
-        { id: '20', name: 'PROFIAP' },
-        { id: '21', name: 'DIREC-CT' },
-        { id: '22', name: 'DIRGE-CT' },
-        { id: '23', name: 'DIRPLAD-CT' },
-      ];
+    const toggleSenhaVisibility = () => setShowSenha((prev) => !prev);
+    const toggleSenhaConfVisibility = () => setShowSenhaConf((prev) => !prev);
 
     const addBd = async () =>{
         if(nome === '' ||email === '' ||senha === '' || senhaConf ==''){
@@ -68,7 +49,7 @@ const Cadastro: React.FC = () => {
                 email: email,
                 senha: senha,
             };
-    
+
             const response = await api.post("/usuarios", usuarioData);
             const usuarioId = response.data.dadosUsuario.id; 
 
@@ -126,7 +107,6 @@ const Cadastro: React.FC = () => {
                          </InputView>
 
                         <CustomDropdown
-                        data={data}
                         selectedValues={nucleoSelecionados}
                         onSelect={setNucleoSelecionados}
                         />
@@ -135,19 +115,26 @@ const Cadastro: React.FC = () => {
                             <Fontisto style={styles.iconInput}name="locked" size={17} color="black" />
                             <TextInput style={styles.input} 
                             placeholder="| Senha"
-                            secureTextEntry
+                            secureTextEntry={!showSenha}
                             value={senha}
                             onChangeText={setSenha}
                             />
-                       </InputView>   
+                             <TouchableOpacity style={{alignSelf:'center'}} onPress={toggleSenhaVisibility}>
+                                <Feather style={styles.secondIcon} name={showSenha ? 'eye-off' : 'eye'}size={18} color="black"/>
+                            </TouchableOpacity>
+                       </InputView>
+
                         <InputView>
                             <Fontisto style={styles.iconInput}name="locked" size={17} color="black" />
                             <TextInput style={styles.input} 
                             placeholder="| Confirme a Senha"
-                            secureTextEntry
+                            secureTextEntry={!showSenhaConf}
                             value={senhaConf}
                             onChangeText={setSenhaConf}
                             />
+                            <TouchableOpacity style={{alignSelf:'center'}}  onPress={toggleSenhaConfVisibility}>
+                                <Feather style={styles.secondIcon} name={showSenhaConf ? 'eye-off' : 'eye'} size={18} color="black"/>
+                            </TouchableOpacity>
                         </InputView>
                     </View>    
 

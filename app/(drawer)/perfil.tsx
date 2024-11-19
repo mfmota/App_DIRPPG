@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, TextInput } from 'react-native';
+import { Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { styles, useGlobalFonts } from "../styles";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
@@ -12,7 +12,8 @@ import { InputView } from '~/components/InputView';
 import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import api from '../../utils/api';
-import SelectNucleoPerfil from '~/components/SelectNucleoPerfil';
+import CustomDropdown from '~/components/CustomDropdown';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export default function Perfil() {
     const fontsLoaded = useGlobalFonts();
@@ -22,6 +23,7 @@ export default function Perfil() {
     const [senha, setSenha] = useState('');
     const [senhaConf, setSenhaConf] = useState('');
     const [nucleosSelecionados, setNucleosSelecionados] = useState<string[]>([]);
+    const [isEditable,setIsEditable] = useState(false);
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -42,7 +44,6 @@ export default function Perfil() {
         };
         carregarDados();
     }, []);
-
     const atualizar = async () => {
         if (senha !== senhaConf) {
             alert('As senhas precisam ser iguais');
@@ -67,8 +68,11 @@ export default function Perfil() {
             <Background>
                 <Header />
                 <ContainerDrawer>
-                    <View style={[styles.boxTop, { height: hp(13), paddingTop: '5%' }]}>
-                        <Text style={[]}>Atualizar</Text>
+                    <View style={[styles.boxTop, { height: hp(16), paddingTop: '5%'}]}>
+                        <Text style={styles.title}>Atualizar Dados</Text>
+                        <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'20%',marginTop:"5%"}} onPress={()=>setIsEditable(!isEditable)}>
+                            <FontAwesome5 name="pencil-alt" size={24} color="black" />
+                        </TouchableOpacity>
                     </View>
 
                     <View style={[styles.boxMiddle, { overflow: "visible", height: hp(35) }]}>
@@ -78,6 +82,7 @@ export default function Perfil() {
                                 placeholder="| Nome"
                                 value={nome || ''}
                                 onChangeText={setNome}
+                                editable={isEditable}
                             />
                         </InputView>
                         <InputView>
@@ -88,11 +93,14 @@ export default function Perfil() {
                                 autoComplete='email'
                                 value={email || ''}
                                 onChangeText={setEmail}
+                                editable={isEditable}
                             />
                         </InputView>
-                        <SelectNucleoPerfil
-                         onSelect={setNucleosSelecionados}
-                         selectedValues={nucleosSelecionados} />
+                        <CustomDropdown
+                        selectedValues={nucleosSelecionados}
+                        onSelect={setNucleosSelecionados}
+                        disabled={!isEditable}
+                        />
                         <InputView>
                             <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
                             <TextInput style={styles.input}
@@ -100,6 +108,7 @@ export default function Perfil() {
                                 secureTextEntry
                                 value={senha}
                                 onChangeText={setSenha}
+                                editable={isEditable}
                             />
                         </InputView>
                         <InputView>
@@ -109,12 +118,14 @@ export default function Perfil() {
                                 secureTextEntry
                                 value={senhaConf}
                                 onChangeText={setSenhaConf}
+                                editable={isEditable}
                             />
                         </InputView>
                         <Button
                             title='Atualizar'
-                            style={{}}
+                            style={{marginTop:'15%'}}
                             onPress={atualizar}
+                            disabled={!isEditable}
                         />
                     </View>
                 </ContainerDrawer>
