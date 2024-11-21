@@ -28,6 +28,7 @@ export default function Editais() {
     const [userNucleos, setUserNucleos] = useState<number[]>([]); 
     const { bottom } = useSafeAreaInsets();
     const [userId, setUserId] = useState<string | null>(null);
+    const [editalId, setEditalId] = useState<number []>([]);
     const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false); 
 
@@ -69,13 +70,12 @@ export default function Editais() {
             setLoading(true); 
             const fetchEditais = async (nucleosIds: number[]) => {
                 try {
-                    const response = await api.get('/editais', { 
+                    const response = await api.get('/nucleos_editais', { 
                         params:{nucleosIds} 
                     }); 
-                    const editais = Object.values(response.data).flat() as Edital[];
-                    setEditais(editais); 
-
-                    await SecureStore.setItemAsync('editais',JSON.stringify(editais));
+                    setEditalId(response.data);
+                    
+                   // await SecureStore.setItemAsync('editais',JSON.stringify(editais));
 
                 } catch (error) {
                     console.error("Erro ao buscar editais agora", error);
