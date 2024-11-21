@@ -87,8 +87,10 @@ export default function Editais() {
         }
     }, [userNucleos]);
 
+    console.log(editais);
+
     const filteredEditais = editais.filter((edital) => {
-        return edital.titulo.toLowerCase().includes(searchText.toLowerCase());
+        return edital;
     });
 
     const renderItem = ({ item }: { item: Edital }) => (

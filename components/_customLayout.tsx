@@ -1,5 +1,5 @@
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
-import { Pressable, Alert, View } from 'react-native';
+import {Alert, View } from 'react-native';
 import { signOut } from 'firebase/auth'; 
 import { useRouter} from 'expo-router'; 
 import{auth} from '../utils/firebase';

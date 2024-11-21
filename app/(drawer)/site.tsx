@@ -1,9 +1,11 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView,View} from 'react-native';
 import {WebView} from 'react-native-webview';
 import {Header} from '../../components/header/header';
 import { Background } from '~/components/Background';
 import { Container } from '~/components/Container';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { styles } from '../styles';
 
 export default function site(){
 
@@ -12,15 +14,13 @@ export default function site(){
         <SafeAreaView>
             <Background>
                 <Header/>
-                <Container>
+                <View style={styles.site}>
                     <WebView
-                    source={{uri:'https://www.utfpr.edu.br/documentos/pesquisa-e-pos-graduacao/dirppg-ct'}}
+                    source={{uri:'https://www.utfpr.edu.br/estrutura/pesquisa-e-pos-graduacao/dirppg/curitiba'}}
                     />    
-                </Container>  
+                </View>  
             </Background>
         </SafeAreaView>
-
-
 
     );
 

@@ -1,100 +1,105 @@
-import { forwardRef } from 'react';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import { Pressable, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View, ViewStyle,Linking,Platform } from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View,Linking,Platform } from 'react-native';
 import Foundation from '@expo/vector-icons/Foundation';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import{useGlobalFonts} from '../app/styles'
 
-type OptionProps = {
+
+type ContactProps = {
+    secretaria?:string;
     email?: string;
     tel?: string;
-    local?:string
+    local?:string;
   };
 
-  const openEmail = () =>{
-    Linking.openURL("mailto: dirppgapp@gmail.com");
+  const openEmail = (email?:string) =>{
+    const emailURL = `mailto:${email}`;
+    Linking.openURL(emailURL).catch((err) =>
+        console.error("Não foi possível abrir o aplicativo de e-mail:", err)
+  );
 }
 
-const makePhoneCall = () =>{
-    if(Platform.OS === "android")
-        Linking.openURL("tel: 41 33104676");
-    else
-    Linking.openURL("telprompt: 41 33104676");
+const makePhoneCall = (tel?: string) =>{
+    const phoneURL = Platform.OS === "android" ? `tel:${tel}` : `telprompt:${tel}`;
+    Linking.openURL(phoneURL).catch((err) =>
+    console.error("Não foi possível abrir o discador:", err)
+  );
 }
-const openMaps = () => {
-    const address = "Av. Sete de Setembro, 3.165, Curitiba, PR";
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-    Linking.openURL(url);
+const openMaps = (local?:string) => {
+    if (!local) {
+        console.warn("Localização não fornecida.");
+        return;
+    }
+
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(local)}`;
+    Linking.openURL(url).catch((err) =>
+        console.error("Não foi possível abrir o mapa:", err)
+    );
 }
 
-const Contact:  React.FC <OptionProps> = ({ 
+const Contact:  React.FC <ContactProps> = ({ 
+    secretaria,
     email,
     tel,
-    local= false,
+    local,
 }) => {
+    const fontsLoaded = useGlobalFonts();
+
+    if (!fontsLoaded) {
+        return null; 
+    }
         return( 
+
             <View style={styles.container}>
-                <View style={styles.boxInfoDuvidas}>
-                    <Pressable style={{marginRight:20}}
-                        onPress={openEmail}>
-                        <MaterialIcons name="email" size={24} color="black" />
-                    </Pressable>
-            
-                    <Text style={styles.txtContato}>dirppg-ct@utfpr.edu.br </Text>  
-                </View>
+                <Text style={styles.subTitle}>{secretaria}</Text>
 
-                <View style={styles.boxInfoDuvidas}>
-                    <Pressable style={{marginRight:20}}
-                    onPress={makePhoneCall}>
-                        <Foundation name="telephone" size={24} color="black" />
-                    </Pressable>
-                 <Text style={styles.txtContato}>(41) 3310-4545 </Text>
-                </View>
+                <TouchableOpacity style={styles.boxInfoDuvidas} onPress={() => openEmail(email)}>
+                    <MaterialIcons style={styles.icon} name="email" size={24} color="black" />
+                    <Text style={styles.txtContato}>{email}</Text> 
+                </TouchableOpacity>
 
-                <View style={styles.boxInfoDuvidas}>
-                    <Pressable style={{marginRight:20}}  onPress={openMaps}>
-                        <MaterialIcons name="place" size={24} color="black" />
-                    </Pressable>  
-                        
-                    <Text style={[styles.txtContato,{width:'80%'}]}>
-                        Av. Sete de Setembro, 3.165 – Curitiba PR. Sala: CJ – 007
-                        Andar térreo.
-                    </Text>
-                </View>
+                <TouchableOpacity style={styles.boxInfoDuvidas} onPress={() => makePhoneCall(tel)}>
+                    <Foundation  style={styles.icon}  name="telephone" size={24} color="black" />
+                    <Text style={styles.txtContato}>{tel}</Text>
+                 </TouchableOpacity>
+
+                <TouchableOpacity style={styles.boxInfoDuvidas} onPress={() => openMaps(local)}>
+                    <MaterialIcons style={styles.icon} name="place" size={24} color="black" />
+                    <Text style={styles.txtContato}>{local}</Text>
+                </TouchableOpacity>
+
             </View>
         );
     };  
 
   const styles = StyleSheet.create({
     container: {
-      height: hp(15),
       width:'80%',
-      marginBottom: 12,
-      borderRadius:40,
-      backgroundColor:'#e8ebfa',  
-      paddingBottom:'2%',
-      paddingTop:'1%',
+      paddingTop: 12,
       alignSelf:'center',
+      borderBottomWidth:2,
+      borderColor:"#ddd",
+      height:hp(20)
     },
-
-    boxDuvidas:{
-        height:'70%', 
-        padding: 20,
-        marginVertical: 20,
-        alignItems: 'flex-start', 
-        width: '80%'
-    },
-
     boxInfoDuvidas:{
+        marginTop:'3%',
         flexDirection:'row',
         alignItems:'center',
-        paddingBottom:35
+        paddingBottom:2,
     },
 
     txtContato:{
-        fontFamily:'Montserrat-SemiBold'
-        
+        fontFamily:'Montserrat-SemiBold',
+        width:'80%',
     },   
+    subTitle:{
+        alignSelf:'center',
+        fontSize:12,
+        fontFamily: 'Montserrat-Bold'
+    },
+    icon:{
+        marginRight:20
+    }
 });
 
 export default Contact;

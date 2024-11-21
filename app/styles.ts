@@ -15,15 +15,15 @@ export function useGlobalFonts() {
     });
   
     useEffect(() => {
-      async function prepare() {
-        if (error) {
-          console.error('Erro ao carregar fontes', error);
-          await SplashScreen.hideAsync();
-        } else if (fontsLoaded) {
-          await SplashScreen.hideAsync();
+        async function prepare() {
+            if (error) {
+                console.error('Erro ao carregar fontes', error);
+                await SplashScreen.hideAsync();
+            } else if (fontsLoaded) {
+                await SplashScreen.hideAsync();
+            }
         }
-      }
-      prepare();
+        prepare();
     }, [fontsLoaded, error]);
   
     return fontsLoaded;
@@ -113,28 +113,7 @@ export const styles = StyleSheet.create({
         marginBottom:'10%',
         alignSelf:'center',
      },
-
-//----------------------------------------CONTATO----------------------------------------------------
-
-    boxDuvidas:{
-        height:'70%', 
-        padding: 20,
-        marginVertical: 20,
-        alignItems: 'flex-start', 
-        width: '80%'
-    },
-
-    boxInfoDuvidas:{
-        flexDirection:'row',
-        alignItems:'center',
-        paddingBottom:35
-    },
-
-    txtContato:{
-        fontFamily:'Montserrat-SemiBold'
-        
-    },   
-
+ 
 //--------------------------------------AGENDA-----------------------------------------------------------------
 
     buscaContainer: {
@@ -172,7 +151,6 @@ export const styles = StyleSheet.create({
         marginRight:'5%',
         marginTop:'2%'
     },
-
 
     dropdown: {
         backgroundColor: '#fff',
@@ -238,6 +216,17 @@ export const styles = StyleSheet.create({
         width:'80%',
         fontSize:22,
     },
+
+//--------------------------------SITE---------------------------------------------
+    site:{
+        height:hp(80),
+        backgroundColor:'white',
+        borderRadius:20,
+        marginTop:'15%',
+        marginBottom:'12%',
+        marginHorizontal:'6%',
+        overflow:'hidden'
+    },    
 
 
 })
