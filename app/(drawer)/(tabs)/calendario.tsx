@@ -24,8 +24,8 @@ export type Edital = {
 export default function Editais() {
     const fontsLoaded = useGlobalFonts();
     const [editais, setEditais] = useState<Edital[]>([]);
+    const [nucleos,setNucleos] = useState<number []>([]);
     const [searchText, setSearchText] = useState<string>('');
-    const [userNucleos, setUserNucleos] = useState<number[]>([]); 
     const { bottom } = useSafeAreaInsets();
     const [userId, setUserId] = useState<string | null>(null);
     const [editalId, setEditalId] = useState<number []>([]);
@@ -33,6 +33,7 @@ export default function Editais() {
     const [loading, setLoading] = useState<boolean>(false); 
 
     useEffect(() => {
+        setLoading(true); 
         const fetchUserId = async () => {
             try {
                 const id = await SecureStore.getItemAsync('id');
@@ -51,46 +52,77 @@ export default function Editais() {
                     const response = await api.get("/usuarios_nucleos", {
                         params: { usuario_id: userId }
                     });
-                    setUserNucleos(response.data);
-
-                    await SecureStore.setItemAsync('nucleos',JSON.stringify(response.data))
+                    
+                    setNucleos(response.data);
+                    await SecureStore.setItemAsync('nucleos',JSON.stringify(response.data));
                     
                 } catch (error) {
-                    setEditais([]);
                     console.error("Erro ao buscar núcleos do usuário", error);
                 }
             };
             const numericUserId = parseInt(userId, 10);
             fetchUserNucleos(numericUserId);
-        }
+        };
     }, [userId]); 
 
     useEffect(() => {
-        if (userNucleos.length > 0) {
-            setLoading(true); 
-            const fetchEditais = async (nucleosIds: number[]) => {
+        if (nucleos.length > 0) {
+            const fetchEditaisID = async (nucleosIds: number[]) => {
                 try {
-                    const response = await api.get('/nucleos_editais', { 
+                    const responseNucleos = await api.get('/nucleos_editais', { 
                         params:{nucleosIds} 
                     }); 
-                    setEditalId(response.data);
-                    
-                   // await SecureStore.setItemAsync('editais',JSON.stringify(editais));
+                    const editalIds = responseNucleos.data; 
 
+                    if (editalIds.length === 0) {
+                        console.log("Nenhum edital encontrado para os núcleos fornecidos.");
+                        setEditalId([]); 
+                        return;
+                    };
+
+                    console.log(editalIds);
+                    setEditalId(editalIds);
+                    console.log(editalId);
+                    
                 } catch (error) {
-                    console.error("Erro ao buscar editais agora", error);
-                }finally {
-                    setLoading(false);  
+                    console.error("Erro ao buscar id edital", error);
+                    return;
                 }
             };
-            fetchEditais(userNucleos);
+            fetchEditaisID(nucleos);
         }
-    }, [userNucleos]);
+    }, [nucleos]);
+
+    useEffect(() =>{
+        if(editalId.length > 0){
+
+            const fetchEditais = async (editaisIds: number[]) => {
+                try{
+                    const response = await api.get('/editais',{
+                        params:{id: editaisIds}
+                    });
+                    const editais = response.data;
+                    setEditais(editais); 
+
+                    await SecureStore.setItemAsync('editais',JSON.stringify(editais));
+
+                }catch(error){
+                    console.error('erro ao  buscar editais',error);
+                }  
+
+                finally {
+                    setLoading(false);  
+                }
+            }    
+            fetchEditais(editalId);
+        }
+    },[editalId]);
 
     console.log(editais);
 
     const filteredEditais = editais.filter((edital) => {
         return edital;
+        //return edital.titulo.toLowerCase().includes(searchText.toLowerCase());
     });
 
     const renderItem = ({ item }: { item: Edital }) => (
