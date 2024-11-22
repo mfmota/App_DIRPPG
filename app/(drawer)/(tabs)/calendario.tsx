@@ -79,10 +79,8 @@ export default function Editais() {
                         setEditalId([]); 
                         return;
                     };
-
-                    console.log(editalIds);
+          
                     setEditalId(editalIds);
-                    console.log(editalId);
                     
                 } catch (error) {
                     console.error("Erro ao buscar id edital", error);
@@ -104,8 +102,6 @@ export default function Editais() {
                     const editais = response.data;
                     setEditais(editais); 
 
-                    await SecureStore.setItemAsync('editais',JSON.stringify(editais));
-
                 }catch(error){
                     console.error('erro ao  buscar editais',error);
                 }  
@@ -118,11 +114,8 @@ export default function Editais() {
         }
     },[editalId]);
 
-    console.log(editais);
-
     const filteredEditais = editais.filter((edital) => {
-        return edital;
-        //return edital.titulo.toLowerCase().includes(searchText.toLowerCase());
+        return edital.titulo.toLowerCase().includes(searchText.toLowerCase());
     });
 
     const renderItem = ({ item }: { item: Edital }) => (
@@ -160,10 +153,6 @@ export default function Editais() {
                 <ContainerDrawer style={{ paddingBottom: bottom }}>
                     <View style={[styles.boxTop]}>
                         <View style={styles.buscaContainer}>
-                            <TouchableOpacity onPress={() => {}} style={styles.filterButton}>
-                                <AntDesign name="filter" size={24} color="#black" />
-                            </TouchableOpacity>
-
                             <View style={styles.inputViewAgenda}>
                                 <TextInput
                                     style={styles.inputAgenda}

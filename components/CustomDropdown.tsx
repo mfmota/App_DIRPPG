@@ -40,7 +40,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     { id: '9', name: 'PPGEF' },
     { id: '10', name: 'PPGEL' },
     { id: '11', name: 'PPGEM' },
-    { id: '12', name: 'PPGEFA' },
+    { id: '12', name: 'PPGFA' },
     { id: '13', name: 'FCET' },
     { id: '14', name: 'PGP' },
     { id: '15', name: 'PPGQ' },
@@ -52,6 +52,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     { id: '21', name: 'DIREC-CT' },
     { id: '22', name: 'DIRGE-CT' },
     { id: '23', name: 'DIRPLAD-CT' },
+    { id: '24', name: 'PPGPGP'},
   ];
 
   const dropdownRef = useRef<View>(null);

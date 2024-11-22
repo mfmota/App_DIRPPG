@@ -23,12 +23,13 @@ export default function Perfil() {
     const [senha, setSenha] = useState('');
     const [senhaConf, setSenhaConf] = useState('');
     const [nucleosSelecionados, setNucleosSelecionados] = useState<string[]>([]);
+    const [nucelosIniciais,setNuclesIniciais] = useState<string[]>([]);
     const [isEditable,setIsEditable] = useState(false);
 
     useEffect(() => {
         const carregarDados = async () => {
             try {
-                const id = await SecureStore.getItemAsync('userId');
+                const id = await SecureStore.getItemAsync('id');
                 const nucleos = await SecureStore.getItemAsync('nucleos');
                 const email = await SecureStore.getItemAsync('email');
                 const nome = await SecureStore.getItemAsync('nome');
@@ -36,7 +37,8 @@ export default function Perfil() {
                 setEmail(email);
                 setId(id);
                 if (nucleos) {
-                    setNucleosSelecionados(JSON.parse(nucleos));
+                    setNucleosSelecionados(JSON.parse(nucleos).map(String));
+                    setNuclesIniciais(JSON.parse(nucleos).map(String));
                 }
             } catch (error) {
                 console.error("Erro ao carregar dados do perfil:", error);
@@ -51,12 +53,45 @@ export default function Perfil() {
         }
 
         try {
-            const dadosAtualizados = { nome, email, ...(senha ? { senha } : {}) };
-            await api.put(`usuarios/${id}`, dadosAtualizados);
-            alert('Perfil atualizado com sucesso!');
+            const dadosAtualizados = {id, nome, email, ...(senha ? { senha } : {}) };
+            await api.put('/usuarios', dadosAtualizados);
         } catch (error) {
             console.error("Erro ao atualizar o perfil:", error);
         }
+
+        try{
+
+            const nucleosParaAdicionar = nucleosSelecionados.filter(nucleo => !nucelosIniciais.includes(nucleo));
+            const nucleosParaRemover = nucelosIniciais.filter(nucleo => !nucleosSelecionados.includes(nucleo));
+
+            console.log(nucleosParaAdicionar);
+            console.log(nucleosParaRemover);
+            
+            if(nucleosParaAdicionar.length > 0){
+                for (const nucleo of nucleosParaAdicionar) {
+                    const idNucleo = parseInt(nucleo); 
+                    try {
+                        await api.post("/usuarios_nucleos", {usuario_id: id,nucleo_id: idNucleo,});
+                    } catch (error) {
+                        console.error("Erro ao cadastrar nucleo_usuario:", error);
+                    }
+                }
+            }
+            if(nucleosParaRemover.length > 0){
+                for (const nucleo of nucleosParaRemover) {
+                    const idNucleo = parseInt(nucleo);
+                    try {
+                        await api.delete("/usuarios_nucleos", { data: { usuario_id: id, nucleo_id: idNucleo } });
+                    } catch (error) {
+                        console.error("Erro ao remover nucleo_usuario:", error);
+                    }
+                }
+            }
+        }catch(error){
+            console.error("Erro ao atualizar núcleos:", error);
+        }
+
+
     };
 
     if (!fontsLoaded) {
