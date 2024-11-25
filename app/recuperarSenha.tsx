@@ -24,6 +24,7 @@ export default function recuperarSenha(){
         try {
             const response = await api.post("/request-redefinicao", { email:email });
             alert(response.data.mensagem); 
+            router.push('/'); 
         } catch (error) {
             console.log('Erro ao solicitar redefinição de senha: ' + error);
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, TextInput, SafeAreaView, Alert } from 'react-native';
 import { styles, useGlobalFonts } from "./styles";
-import { useRouter } from 'expo-router';
+import { useRouter,useGlobalSearchParams, RouteParams } from 'expo-router';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Button } from '~/components/Button';
@@ -10,39 +10,20 @@ import { Background } from '~/components/Background';
 import { Footer } from '~/components/footer/footer';
 import { InputView } from '~/components/InputView';
 import api from '../utils/api';
-import * as Linking from 'expo-linking';
 
-export default function ResetarSenha() {
+export default function NovaSenha() {
+    console.log("testse1");
+    const {token} = useGlobalSearchParams<{token : string}>();
+    const router = useRouter();
+
+    console.log('Token capturado:', token); 
 
     const fontsLoaded = useGlobalFonts();
 
     const [senha, setSenha] = useState('');
     const [senhaConf, setSenhaConf] = useState('');
-    const router = useRouter();
-    const [token, setToken] = useState<string | null>(null);
-
-    useEffect(() => {
-        const handleDeepLink = (event: { url: string }) => {
-            const data = Linking.parse(event.url);
-            if (data.path === 'resetarSenha') {
-                const token = Array.isArray(data.queryParams?.token) ? data.queryParams.token[0] : data.queryParams?.token;
-                setToken(token || null);
-            }
-        };
-
-        Linking.getInitialURL().then((url) => {
-            if (url) {
-                handleDeepLink({ url });
-            }
-        });
-        
-        const subscription = Linking.addEventListener('url', handleDeepLink);
-     
-        return () => {
-            subscription.remove();
-        };
-    }, []);
    
+    
     async function solicitarRedefinicaoSenha() {
         if (senha !== senhaConf) {
             alert('As senhas precisam ser iguais');
@@ -55,7 +36,7 @@ export default function ResetarSenha() {
         }
 
         try {
-            const response = await api.post("/reset-password", { token, newPassword: senha });
+            await api.post("/reset-password", { token, newPassword: senha });
             Alert.alert('Senha redefinida'); 
             router.push('/'); 
         } catch (error) {
