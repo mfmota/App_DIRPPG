@@ -22,7 +22,7 @@ export default function recuperarSenha(){
    
     async function solicitarRedefinicaoSenha() {
         try {
-            const response = await api.post("/request-redefinicao", { email:email });
+            const response = await api.post("/request", { email:email });
             alert(response.data.mensagem); 
             router.push('/'); 
         } catch (error) {
@@ -38,7 +38,7 @@ export default function recuperarSenha(){
         <SafeAreaView>
             <Background>
                 <Container>
-                    <View style={[styles.boxTop,{height:hp(20)}]}>
+                    <View style={[styles.boxTop]}>
                         <Text style={styles.title} >DIRPPG-CT</Text>  
                         <Text style={styles.subTitle}>Diretoria de Pesquisa e Pós-Graduação</Text>             
                     </View>
