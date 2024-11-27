@@ -11,13 +11,11 @@ interface DropdownItem {
 interface CustomDropdownProps {
   selectedValues: string[];
   onSelect: (selectedIds: string[]) => void;
-  disabled?: boolean;
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
   selectedValues,
   onSelect,
-  disabled = false,
 }) => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -58,14 +56,10 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   const dropdownRef = useRef<View>(null);
 
   const toggleDropdown = () => {
-    if (!disabled) {
       setIsOpen(!isOpen);
-    }
   };
 
   const handleSelect = (id: string) => {
-    if (disabled) return;
-    
     const updatedSelected = selected.includes(id)
       ? selected.filter((item) => item !== id)
       : [...selected, id];
@@ -85,7 +79,6 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       <TouchableOpacity
         style={[styles.dropdownHeader, { height: isOpen ? 70 : 50 }]}
         onPress={toggleDropdown}
-        disabled={disabled}
       >
         <View style={styles.headerContent}>
           {!selected.length && (
@@ -101,14 +94,13 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           </Text>
         </View>
       </TouchableOpacity>
-      {isOpen && !disabled &&(
+      {isOpen &&(
         <View style={styles.dropdownList}>
           <TextInput
             style={styles.searchInput}
             placeholder="Pesquise"
             value={search}
             onChangeText={setSearch}
-            editable={!disabled}
           />
           <FlatList
             data={filteredData.sort((a, b) => {
@@ -124,7 +116,6 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
                   selected.includes(item.id) && styles.selectedItem,
                 ]}
                 onPress={() => handleSelect(item.id)}
-                disabled={disabled}
               >
                 <Text style={styles.itemText}>{item.name}</Text>
               </TouchableOpacity>

@@ -123,13 +123,6 @@ export const styles = StyleSheet.create({
         overflow:'hidden'
     },
 
-    filterButton: {
-        borderRadius: 5,
-        backgroundColor:'#e8ebfa',
-        padding:2,
-        alignSelf:'center'
-    },
-
     inputViewAgenda:{
         flexDirection:'row',
         justifyContent:'space-between',
@@ -170,7 +163,6 @@ export const styles = StyleSheet.create({
          borderBottomColor: '#ddd',
      },
 
-     
     txtData:{
         fontFamily:'Montserrat-SemiBold',
         fontSize:10,

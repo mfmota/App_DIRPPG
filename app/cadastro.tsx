@@ -1,5 +1,5 @@
 import React ,{useState}  from 'react';
-import {Text,View,TextInput,SafeAreaView,Alert,TouchableOpacity,} from 'react-native';
+import {Text,View,TextInput,SafeAreaView,Alert,TouchableOpacity,ActivityIndicator} from 'react-native';
 import{styles, useGlobalFonts} from "./styles";
 import { router } from 'expo-router';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -19,7 +19,7 @@ import api from '../utils/api';
 const Cadastro: React.FC = () => {
 
     const fontsLoaded = useGlobalFonts();
-   
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [nome, setNome] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
@@ -42,6 +42,15 @@ const Cadastro: React.FC = () => {
             alert('As senhas precisam ser iguais');
             return;
         }
+        try {
+            const response = await api.post("/usuarios/check-email", { email });
+            if (response.data.exists) {
+                alert('Email já cadastrado');
+                return;
+            }
+        }catch(error){
+
+        }  
         
         try {
             const usuarioData = {
@@ -73,89 +82,99 @@ const Cadastro: React.FC = () => {
 
     if (!fontsLoaded) {
         return null; 
-      }
+    }
     
-
-    return(
+    React.useEffect(() => {
+        const timeout = setTimeout(() => setIsLoading(false), 150); 
+        return () => clearTimeout(timeout); 
+    }, []);
+    
+    return (
         <SafeAreaView>
             <Background>
-                <Container>          
-                    <View style={[styles.boxTop,{height:hp(13),paddingTop:'5%'}]}>
-                        <Text style={[styles.title,{fontSize:20}]}>Cadastro</Text> 
-                    </View>
-
-                    <View style={[styles.boxMiddle,{overflow:"visible",height:hp(35)}]}>
-                   
-                        <InputView>
-                            <Ionicons style={styles.iconInput}name="person" size={18} color="black" />
-                            <TextInput style={styles.input} 
-                            placeholder="| Nome"
-                            value={nome}
-                            onChangeText={setNome}
-                            />
-                       </InputView>
-
-                        <InputView>
-                            <MaterialIcons style={styles.iconInput}name="email" size={18} color="black" />
-                            <TextInput style={styles.input} 
-                            placeholder="| Email"
-                            keyboardType='email-address'
-                            autoComplete='email'
-                            value={email}
-                            onChangeText={setEmail}
-                            />
-                         </InputView>
-
-                        <CustomDropdown
-                        selectedValues={nucleoSelecionados}
-                        onSelect={setNucleoSelecionados}
-                        />
-                            
-                        <InputView>
-                            <Fontisto style={styles.iconInput}name="locked" size={17} color="black" />
-                            <TextInput style={styles.input} 
-                            placeholder="| Senha"
-                            secureTextEntry={!showSenha}
-                            value={senha}
-                            onChangeText={setSenha}
-                            />
-                             <TouchableOpacity style={{alignSelf:'center'}} onPress={toggleSenhaVisibility}>
-                                <Feather style={styles.secondIcon} name={showSenha ? 'eye-off' : 'eye'}size={18} color="black"/>
-                            </TouchableOpacity>
-                       </InputView>
-
-                        <InputView>
-                            <Fontisto style={styles.iconInput}name="locked" size={17} color="black" />
-                            <TextInput style={styles.input} 
-                            placeholder="| Confirme a Senha"
-                            secureTextEntry={!showSenhaConf}
-                            value={senhaConf}
-                            onChangeText={setSenhaConf}
-                            />
-                            <TouchableOpacity style={{alignSelf:'center'}}  onPress={toggleSenhaConfVisibility}>
-                                <Feather style={styles.secondIcon} name={showSenhaConf ? 'eye-off' : 'eye'} size={18} color="black"/>
-                            </TouchableOpacity>
-                        </InputView>
-                    </View>    
-
-                    <View style={[styles.boxBottom,{ height:hp(15)}]}>
-                        <Button
-                        title='Criar Conta'
-                        onPress={addBd}
-                        />
-                        <TXTOptions
-                            title1='Já tem conta?'
-                            title2='Faça Login'
-                            style={{flexDirection:'row',marginLeft:'10%'}}
-                            onPress={()=>router.push('/')}
-                        />
-                    </View>
-                   <Footer/>
+                <Container>
+                    {isLoading ? (
+                        <ActivityIndicator />
+                    ) : (
+                        <>
+                            <View style={[styles.boxTop, { height: hp(13), paddingTop: '5%' }]}>
+                                <Text style={[styles.title, { fontSize: 20 }]}>Cadastro</Text>
+                            </View>
+    
+                            <View style={[styles.boxMiddle, { overflow: "visible", height: hp(35) }]}>
+                                <InputView>
+                                    <Ionicons style={styles.iconInput} name="person" size={18} color="black" />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="| Nome"
+                                        value={nome}
+                                        onChangeText={setNome}
+                                    />
+                                </InputView>
+    
+                                <InputView>
+                                    <MaterialIcons style={styles.iconInput} name="email" size={18} color="black" />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="| Email"
+                                        keyboardType="email-address"
+                                        autoComplete="email"
+                                        value={email}
+                                        onChangeText={setEmail}
+                                    />
+                                </InputView>
+    
+                                <CustomDropdown
+                                    selectedValues={nucleoSelecionados}
+                                    onSelect={setNucleoSelecionados}
+                                />
+    
+                                <InputView>
+                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="| Senha"
+                                        secureTextEntry={!showSenha}
+                                        value={senha}
+                                        onChangeText={setSenha}
+                                    />
+                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={toggleSenhaVisibility}>
+                                        <Feather style={styles.secondIcon} name={showSenha ? 'eye-off' : 'eye'} size={18} color="black" />
+                                    </TouchableOpacity>
+                                </InputView>
+    
+                                <InputView>
+                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="| Confirme a Senha"
+                                        secureTextEntry={!showSenhaConf}
+                                        value={senhaConf}
+                                        onChangeText={setSenhaConf}
+                                    />
+                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={toggleSenhaConfVisibility}>
+                                        <Feather style={styles.secondIcon} name={showSenhaConf ? 'eye-off' : 'eye'} size={18} color="black" />
+                                    </TouchableOpacity>
+                                </InputView>
+                            </View>
+    
+                            <View style={[styles.boxBottom, { height: hp(15) }]}>
+                                <Button title="Criar Conta" onPress={addBd} />
+                                <TXTOptions
+                                    title1="Já tem conta?"
+                                    title2="Faça Login"
+                                    style={{ flexDirection: 'row', marginLeft: '10%' }}
+                                    onPress={() => router.push('/')}
+                                />
+                            </View>
+                            <Footer />
+                        </>
+                    )}
+                    
                 </Container>
             </Background>
         </SafeAreaView>
-    );
-
+    );    
 };
 
 export default Cadastro;

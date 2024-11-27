@@ -5,7 +5,7 @@ import api from '../../../utils/api';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Header } from '../../../components/header/header';
+import { Header } from '~/components/header/header';
 import { Background } from '~/components/Background';
 import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
@@ -76,6 +76,7 @@ export default function Editais() {
 
                     if (editalIds.length === 0) {
                         console.log("Nenhum edital encontrado para os núcleos fornecidos.");
+                        setLoading(false); 
                         setEditalId([]); 
                         return;
                     };

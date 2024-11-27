@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, SafeAreaView, TextInput,ActivityIndicator,Alert } from 'react-native';
 import { styles, useGlobalFonts } from "../styles";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { Header } from '../../components/header/header';
+import { Header } from '~/components/header/header';
 import { Background } from '~/components/Background';
 import { Button } from '~/components/Button';
 import { InputView } from '~/components/InputView';
@@ -13,10 +13,10 @@ import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import api from '../../utils/api';
 import CustomDropdown from '~/components/CustomDropdown';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export default function Perfil() {
     const fontsLoaded = useGlobalFonts();
+    const [isLoading,setIsLoading] = useState<boolean>(true);
     const [nome, setNome] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
     const [id, setId] = useState<string | null>(null);
@@ -24,7 +24,6 @@ export default function Perfil() {
     const [senhaConf, setSenhaConf] = useState('');
     const [nucleosSelecionados, setNucleosSelecionados] = useState<string[]>([]);
     const [nucelosIniciais,setNuclesIniciais] = useState<string[]>([]);
-    const [isEditable,setIsEditable] = useState(false);
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -46,6 +45,8 @@ export default function Perfil() {
         };
         carregarDados();
     }, []);
+
+
     const atualizar = async () => {
         if (senha !== senhaConf) {
             alert('As senhas precisam ser iguais');
@@ -90,79 +91,95 @@ export default function Perfil() {
         }catch(error){
             console.error("Erro ao atualizar núcleos:", error);
         }
+    };
 
-
+    const confirmarAtualizacao = () => {
+        Alert.alert(
+            "Confirmar atualização",
+            "Deseja realmente atualizar o perfil?",
+            [
+                { text: "Cancelar", style: "cancel" },
+                { text: "Atualizar", onPress: atualizar }
+            ]
+        );
     };
 
     if (!fontsLoaded) {
         return null;
     }
 
+    React.useEffect(() => {
+        const timeout = setTimeout(() => setIsLoading(false), 300); 
+        return () => clearTimeout(timeout); 
+    }, []);
+
     return (
         <SafeAreaView>
             <Background>
                 <Header />
                 <ContainerDrawer>
-                    <View style={[styles.boxTop, { height: hp(16), paddingTop: '5%'}]}>
-                        <Text style={styles.title}>Atualizar Dados</Text>
-                        <TouchableOpacity style={{alignSelf:'flex-end',marginRight:'20%',marginTop:"5%"}} onPress={()=>setIsEditable(!isEditable)}>
-                            <FontAwesome5 name="pencil-alt" size={24} color="black" />
-                        </TouchableOpacity>
-                    </View>
 
-                    <View style={[styles.boxMiddle, { overflow: "visible", height: hp(35) }]}>
-                        <InputView>
-                            <Ionicons style={styles.iconInput} name="person" size={18} color="black" />
-                            <TextInput style={styles.input}
-                                placeholder="| Nome"
-                                value={nome || ''}
-                                onChangeText={setNome}
-                                editable={isEditable}
-                            />
-                        </InputView>
-                        <InputView>
-                            <MaterialIcons style={styles.iconInput} name="email" size={18} color="black" />
-                            <TextInput style={styles.input}
-                                placeholder='email'
-                                keyboardType='email-address'
-                                autoComplete='email'
-                                value={email || ''}
-                                onChangeText={setEmail}
-                                editable={isEditable}
-                            />
-                        </InputView>
-                        <CustomDropdown
-                        selectedValues={nucleosSelecionados}
-                        onSelect={setNucleosSelecionados}
-                        disabled={!isEditable}
-                        />
-                        <InputView>
-                            <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
-                            <TextInput style={styles.input}
-                                placeholder="| Senha"
-                                secureTextEntry
-                                value={senha}
-                                onChangeText={setSenha}
-                                editable={isEditable}
-                            />
-                        </InputView>
-                        <InputView>
-                            <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
-                            <TextInput style={styles.input}
-                                placeholder="| Confirme a Senha"
-                                secureTextEntry
-                                value={senhaConf}
-                                onChangeText={setSenhaConf}
-                                editable={isEditable}
-                            />
-                        </InputView>
-                        <Button
-                            title='Atualizar'
-                            style={{marginTop:'15%'}}
-                            onPress={atualizar}
-                            disabled={!isEditable}
-                        />
-                    </View>
+                    {isLoading ? (
+                        <ActivityIndicator/>
+                    ):
+                    
+                    (
+                        <>
+                            <View style={[styles.boxTop, { height: hp(16), paddingTop: '5%'}]}>
+                                <Text style={[styles.title,{fontSize:30}]}>Atualizar Dados</Text>
+                            </View>
+
+                            <View style={[styles.boxMiddle, { overflow: "visible", height: hp(35) }]}>
+                                <InputView>
+                                    <Ionicons style={styles.iconInput} name="person" size={18} color="black" />
+                                    <TextInput style={styles.input}
+                                        placeholder="| Nome"
+                                        value={nome || ''}
+                                        onChangeText={setNome}
+                                    />
+                                </InputView>
+                                <InputView>
+                                    <MaterialIcons style={styles.iconInput} name="email" size={18} color="black" />
+                                    <TextInput style={styles.input}
+                                        placeholder='email'
+                                        keyboardType='email-address'
+                                        autoComplete='email'
+                                        value={email || ''}
+                                        onChangeText={setEmail}
+                                    />
+                                </InputView>
+                                <CustomDropdown
+                                selectedValues={nucleosSelecionados}
+                                onSelect={setNucleosSelecionados}
+                                />
+                                <InputView>
+                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
+                                    <TextInput style={styles.input}
+                                        placeholder="| Senha"
+                                        secureTextEntry
+                                        value={senha}
+                                        onChangeText={setSenha}
+                                    />
+                                </InputView>
+                                <InputView>
+                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
+                                    <TextInput style={styles.input}
+                                        placeholder="| Confirme a Senha"
+                                        secureTextEntry
+                                        value={senhaConf}
+                                        onChangeText={setSenhaConf}
+                                    />
+                                </InputView>
+                                <Button
+                                    title='Atualizar'
+                                    style={{marginTop:'15%'}}
+                                    onPress={confirmarAtualizacao}
+                                />
+                            </View>
+                        
+                        </>
+
+                    )}
                 </ContainerDrawer>
             </Background>
         </SafeAreaView>

@@ -6,7 +6,7 @@ import { ref,onValue } from 'firebase/database';
 import { differenceInDays, compareAsc } from 'date-fns';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from 'expo-router';
-import {Header} from '../../../components/header/header';
+import {Header} from '~/components/header/header';
 import { Background } from '~/components/Background';
 import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
@@ -129,11 +129,11 @@ export default function prazos (){
 
                 {selectedEventId === item.id && (
                     <View style={{paddingLeft:'2%',paddingVertical:'3%'}}>
-                        <Text style={styles.txtDetalhes}>Dia todo: {item.eventoDeDiaInteiro ? 'Sim' : 'Não'}</Text>   
-                        <Text style={styles.txtDetalhes}>Local: {item.local}</Text>
-                        <Text style={styles.txtDetalhes}>Núcleo: {item.nucleo}</Text>
-                        <Text style={styles.txtDetalhes}>Convidados: {item.convidados}</Text>
-                        <Text style={styles.txtDetalhes}>{item.descricaoDoEvento}</Text>
+                        <Text style={{}}>Dia todo: {item.eventoDeDiaInteiro ? 'Sim' : 'Não'}</Text>   
+                        <Text style={{}}>Local: {item.local}</Text>
+                        <Text style={{}}>Núcleo: {item.nucleo}</Text>
+                        <Text style={{}}>Convidados: {item.convidados}</Text>
+                        <Text style={{}}>{item.descricaoDoEvento}</Text>
                     </View>
                 )}
             </View>
