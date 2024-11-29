@@ -1,10 +1,10 @@
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from "@react-navigation/drawer";
 import {Alert, View } from 'react-native';
-import { signOut } from 'firebase/auth'; 
 import { useRouter} from 'expo-router'; 
-import{auth} from '../utils/firebase';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'; 
+import * as SecureStore from 'expo-secure-store';
+
 
 export default function customLayout(props: any){
     
@@ -13,8 +13,11 @@ export default function customLayout(props: any){
     
     const logout = async () => {
         try {
-            await signOut(auth);  
-            router.replace('/'); 
+          await SecureStore.deleteItemAsync('token');
+          await SecureStore.deleteItemAsync('id');
+          await SecureStore.deleteItemAsync('nome');
+          await SecureStore.deleteItemAsync('email'); 
+          router.replace('/'); 
         } 
         catch (error) {
             console.log('Erro ao sair: ', error);

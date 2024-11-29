@@ -24,6 +24,7 @@ export default function Perfil() {
     const [senhaConf, setSenhaConf] = useState('');
     const [nucleosSelecionados, setNucleosSelecionados] = useState<string[]>([]);
     const [nucelosIniciais,setNuclesIniciais] = useState<string[]>([]);
+    const [token,setToken] = useState<string | null>(null);
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -32,9 +33,11 @@ export default function Perfil() {
                 const nucleos = await SecureStore.getItemAsync('nucleos');
                 const email = await SecureStore.getItemAsync('email');
                 const nome = await SecureStore.getItemAsync('nome');
+                const token = await SecureStore.getItemAsync('token');
                 setNome(nome);
                 setEmail(email);
                 setId(id);
+                setToken(token);
                 if (nucleos) {
                     setNucleosSelecionados(JSON.parse(nucleos).map(String));
                     setNuclesIniciais(JSON.parse(nucleos).map(String));
@@ -54,8 +57,12 @@ export default function Perfil() {
         }
 
         try {
-            const dadosAtualizados = {id, nome, email, ...(senha ? { senha } : {}) };
-            await api.put('/usuarios', dadosAtualizados);
+            const dadosAtualizados = {id,nome, email, ...(senha ? { senha } : {}) };
+            await api.patch('/usuarios', dadosAtualizados,{
+                headers:{
+                    Authorization: `Bearer ${token}`,
+                },
+            });
         } catch (error) {
             console.error("Erro ao atualizar o perfil:", error);
         }
@@ -64,9 +71,6 @@ export default function Perfil() {
 
             const nucleosParaAdicionar = nucleosSelecionados.filter(nucleo => !nucelosIniciais.includes(nucleo));
             const nucleosParaRemover = nucelosIniciais.filter(nucleo => !nucleosSelecionados.includes(nucleo));
-
-            console.log(nucleosParaAdicionar);
-            console.log(nucleosParaRemover);
             
             if(nucleosParaAdicionar.length > 0){
                 for (const nucleo of nucleosParaAdicionar) {

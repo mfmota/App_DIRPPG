@@ -29,35 +29,22 @@ export default function Login(){
     const userLogin = async () => {
         
         try {
-        setLoading(true);
-        
-        const response = await api.post("/usuarios/login", {
-            email: email,
-            senha: senha,
-        });
-        
-        if (response.status === 200) {
+            setLoading(true);
+            
+            const response = await api.post("/usuarios/login", {
+                email: email,
+                senha: senha,
+            });
 
-            const userResponse = await api.get("/usuarios", {
-                params:{email:email}
-            }); 
-
-           if (userResponse.status === 200 && userResponse.data) {
-
-                const userId = userResponse.data.usuario.id; 
-                const nome = userResponse.data.usuario.nome; 
-                
-                await SecureStore.setItemAsync('id', userId.toString());
-                await SecureStore.setItemAsync('nome', nome);
-                await SecureStore.setItemAsync('email', email);
-                
-                router.push('../(tabs)/calendario');
-
-            } else {
-                throw new Error("Erro ao buscar o ID do usuário");
-            }
+            const {token,usuario} = response.data
+            
+            await SecureStore.setItemAsync('token',token)
+            await SecureStore.setItemAsync('id', usuario.id.toString());
+            await SecureStore.setItemAsync('nome', usuario.nome);
+            await SecureStore.setItemAsync('email', usuario.email);
+                    
             router.push('../(tabs)/calendario');
-        }
+
         } catch (error) {
             Alert.alert('Email ou senha incorretos');
         } finally {

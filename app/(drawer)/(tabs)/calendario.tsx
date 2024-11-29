@@ -136,8 +136,8 @@ export default function Editais() {
                     <Text style={styles.dropdownItem}>Descrição: {item.descricao}</Text>
                     <Text style={styles.dropdownItem}>Atividade: {item.atividade}</Text>
                     <Text style={styles.dropdownItem}>Período: {item.periodo}</Text>
-                    <Text style={styles.dropdownItem}>Link 1: {item.link1}</Text>
-                    <Text style={styles.dropdownItem}>Link 2: {item.link2}</Text>
+                    <Text style={styles.dropdownItem}>Edital: {item.link1}</Text>
+                    <Text style={styles.dropdownItem}>SEI: {item.link2}</Text>
                 </View>
             )}
         </View>

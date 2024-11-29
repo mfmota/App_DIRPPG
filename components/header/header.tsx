@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet,View} from 'react-native';
 import { DrawerToggleButton } from '@react-navigation/drawer';
-import Logo from "./assets/images/logoDIRPPG.png";
+import Logo from '../../assets/images/logoDIRPPG.png';
 import { Image } from 'expo-image'
 
 export const Header = () =>{
