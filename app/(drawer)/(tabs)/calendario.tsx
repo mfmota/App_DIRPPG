@@ -106,12 +106,33 @@ export default function Editais() {
                 }catch(error){
                     console.error('erro ao  buscar editais',error);
                 }  
+            }    
+            fetchEditais(editalId);
+        }
+    },[editalId]);
+
+
+    //esse
+    useEffect(() =>{
+        if(editalId.length > 0){
+
+            const fetchPrazos = async (editaisIds: number[]) => {
+                try{
+                    const response = await api.get('/prazos',{
+                        params:{id: editaisIds}
+                    });
+                    const prazos = response.data;
+                    //setEditais(editais); 
+
+                }catch(error){
+                    console.error('erro ao  buscar prazos',error);
+                }  
 
                 finally {
                     setLoading(false);  
                 }
             }    
-            fetchEditais(editalId);
+            fetchPrazos(editalId);
         }
     },[editalId]);
 
