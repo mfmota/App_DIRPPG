@@ -10,15 +10,20 @@ import { Background } from '~/components/Background';
 import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 
+export type Prazo = {
+    id_edital: string;
+    descricao:string;
+    data:string;
+};
+
 export type Edital = {
     id: string;
     nucleo:string;
     link1:string;
     link2:string;
     descricao: string;
-    atividade: string;
-    periodo: string;
     titulo: string;
+    prazos: Prazo[];
 };
 
 export default function Editais() {
@@ -80,9 +85,7 @@ export default function Editais() {
                         setEditalId([]); 
                         return;
                     };
-          
                     setEditalId(editalIds);
-                    
                 } catch (error) {
                     console.error("Erro ao buscar id edital", error);
                     return;
@@ -94,7 +97,6 @@ export default function Editais() {
 
     useEffect(() =>{
         if(editalId.length > 0){
-
             const fetchEditais = async (editaisIds: number[]) => {
                 try{
                     const response = await api.get('/editais',{
@@ -102,37 +104,31 @@ export default function Editais() {
                     });
                     const editais = response.data;
                     setEditais(editais); 
-
                 }catch(error){
                     console.error('erro ao  buscar editais',error);
                 }  
-            }    
-            fetchEditais(editalId);
-        }
-    },[editalId]);
-
-
-    //esse
-    useEffect(() =>{
-        if(editalId.length > 0){
-
+            };    
             const fetchPrazos = async (editaisIds: number[]) => {
                 try{
                     const response = await api.get('/prazos',{
                         params:{id: editaisIds}
                     });
                     const prazos = response.data;
-                    //setEditais(editais); 
-
+                    const updatedEditais = editais.map(edital => ({
+                        ...edital,
+                        prazos: prazos.filter(
+                            (prazo: Prazo) => prazo.id_edital === edital.id),
+                    })); 
+                    setEditais(updatedEditais);
                 }catch(error){
                     console.error('erro ao  buscar prazos',error);
-                }  
-
-                finally {
+                }finally {
                     setLoading(false);  
                 }
-            }    
-            fetchPrazos(editalId);
+            };    
+            fetchEditais(editalId).then(() => {
+                fetchPrazos(editalId);
+            });
         }
     },[editalId]);
 
@@ -155,10 +151,18 @@ export default function Editais() {
                 <View style={styles.dropdown}>
                     <Text style={styles.dropdownItem}>Núcleo: {item.nucleo}</Text>
                     <Text style={styles.dropdownItem}>Descrição: {item.descricao}</Text>
-                    <Text style={styles.dropdownItem}>Atividade: {item.atividade}</Text>
-                    <Text style={styles.dropdownItem}>Período: {item.periodo}</Text>
                     <Text style={styles.dropdownItem}>Edital: {item.link1}</Text>
                     <Text style={styles.dropdownItem}>SEI: {item.link2}</Text>
+                    <Text style={styles.dropdownItem}>Cronograma:</Text>
+                    {item.prazos != null ? (
+                        item.prazos.map((prazo, index) => (
+                            <Text key={index} style={styles.dropdownItem}>
+                                {prazo.descricao}: {prazo.data}
+                            </Text>
+                        ))
+                    ) : (
+                        <Text style={styles.dropdownItem}>Nenhum prazo disponível</Text>
+                    )}
                 </View>
             )}
         </View>
@@ -191,14 +195,15 @@ export default function Editais() {
                     <View style={[styles.boxMiddle, { height: '100%' }]}>
                         {loading ? (
                             <ActivityIndicator size="large" color="#0000ff" />
-                        ) : filteredEditais.length > 0 ? (
+                        ) : filteredEditais.length == 0 ? (
+                            <Text>Não há editais disponíveis.</Text>
+                            
+                        ) : (
                             <FlatList
                                 data={filteredEditais}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.id}
                             />
-                        ) : (
-                            <Text>Não há editais disponíveis.</Text>
                         )}
                     </View>
                 </ContainerDrawer>

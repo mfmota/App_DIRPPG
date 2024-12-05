@@ -85,7 +85,7 @@ const Cadastro: React.FC = () => {
     }
     
     React.useEffect(() => {
-        const timeout = setTimeout(() => setIsLoading(false), 150); 
+        const timeout = setTimeout(() => setIsLoading(false), 200); 
         return () => clearTimeout(timeout); 
     }, []);
     
