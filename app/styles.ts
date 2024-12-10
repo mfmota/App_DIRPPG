@@ -162,6 +162,17 @@ export const styles = StyleSheet.create({
          borderBottomWidth: 1,
          borderBottomColor: '#ddd',
      },
+     dropdownItemLink: {
+        padding: 10,
+        
+    },
+
+    dropdownLink:{
+        color:'blue',
+        padding:10.,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+    },
 
     txtData:{
         fontFamily:'Montserrat-SemiBold',

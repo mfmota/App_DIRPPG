@@ -13,12 +13,15 @@ import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import api from '../../utils/api';
 import CustomDropdown from '~/components/CustomDropdown';
+import { GlobalEvents } from '~/utils/GlobalEvents';
 
 export default function Perfil() {
     const fontsLoaded = useGlobalFonts();
     const [isLoading,setIsLoading] = useState<boolean>(true);
     const [nome, setNome] = useState<string | null>(null);
+    const [nomeAnterior, setNomeAnterior] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
+    const [emailAnteiror, setEmailAnterior]  = useState<string | null>(null);
     const [id, setId] = useState<string | null>(null);
     const [senha, setSenha] = useState('');
     const [senhaConf, setSenhaConf] = useState('');
@@ -35,7 +38,9 @@ export default function Perfil() {
                 const nome = await SecureStore.getItemAsync('nome');
                 const token = await SecureStore.getItemAsync('token');
                 setNome(nome);
+                setNomeAnterior(nome);
                 setEmail(email);
+                setEmailAnterior(email);
                 setId(id);
                 setToken(token);
                 if (nucleos) {
@@ -56,13 +61,25 @@ export default function Perfil() {
             return;
         }
 
+        
         try {
-            const dadosAtualizados = {id,nome, email, ...(senha ? { senha } : {}) };
-            await api.patch('/usuarios', dadosAtualizados,{
-                headers:{
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const dadosAtualizados: { id: string | null; nome?: string; email?: string; senha?: string } = { id, ...(senha ? { senha } : {}) };
+
+            if (nome !== nomeAnterior) {
+                dadosAtualizados.nome = nome || undefined;
+            }
+    
+            if (email !== emailAnteiror) {
+                dadosAtualizados.email = email || undefined;
+            }
+
+            if (nome !== nomeAnterior || email !== emailAnteiror) {
+                await api.patch('/usuarios', dadosAtualizados, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+            }
         } catch (error) {
             console.error("Erro ao atualizar o perfil:", error);
         }
@@ -92,8 +109,13 @@ export default function Perfil() {
                     }
                 }
             }
+            Alert.alert('Sucesso', 'Usuário atualizado com sucesso');
+            GlobalEvents.emit('nucleosAtualizados');
+            GlobalEvents.emit('updateFlagChanged', true); 
+
         }catch(error){
             console.error("Erro ao atualizar núcleos:", error);
+            
         }
     };
 

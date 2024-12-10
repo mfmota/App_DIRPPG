@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, SafeAreaView, TouchableOpacity, FlatList,ActivityIndicator } from 'react-native';
+import React, { useState, useEffect,useMemo } from 'react';
+import { Text, View, TextInput, SafeAreaView, TouchableOpacity, FlatList,ActivityIndicator, Linking } from 'react-native';
 import { styles, useGlobalFonts } from "../../styles";
 import api from '../../../utils/api';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -9,6 +9,8 @@ import { Header } from '~/components/header/header';
 import { Background } from '~/components/Background';
 import { ContainerDrawer } from '~/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
+import { GlobalEvents } from '~/utils/GlobalEvents';
+import { EditaisProvider, useEditais } from '../../../context/editaisContext';
 
 export type Prazo = {
     id_edital: string;
@@ -26,7 +28,7 @@ export type Edital = {
     prazos: Prazo[];
 };
 
-export default function Editais() {
+const Editais = () => {
     const fontsLoaded = useGlobalFonts();
     const [editais, setEditais] = useState<Edital[]>([]);
     const [nucleos,setNucleos] = useState<number []>([]);
@@ -36,105 +38,95 @@ export default function Editais() {
     const [editalId, setEditalId] = useState<number []>([]);
     const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false); 
+    const [updateFlag, setUpdateFlag] = useState<boolean>(false);
 
     useEffect(() => {
-        setLoading(true); 
-        const fetchUserId = async () => {
-            try {
-                const id = await SecureStore.getItemAsync('id');
-                setUserId(id);
-            } catch (error) {
-                console.error(error);
-            }
+        const onUpdateFlagChanged = (flag: boolean) => {
+            setUpdateFlag(flag); 
         };
-        fetchUserId();
+        GlobalEvents.on('updateFlagChanged', onUpdateFlagChanged);
+        return () => {
+            GlobalEvents.off('updateFlagChanged', onUpdateFlagChanged);
+        };
     }, []);
 
     useEffect(() => {
-        if (userId) {  
-            const fetchUserNucleos = async (userId: number) => {
-                try {
-                    const response = await api.get("/usuarios_nucleos", {
-                        params: { usuario_id: userId }
-                    });
-                    
-                    setNucleos(response.data);
-                    await SecureStore.setItemAsync('nucleos',JSON.stringify(response.data));
-                    
-                } catch (error) {
-                    console.error("Erro ao buscar núcleos do usuário", error);
+        const fetchNucleos = async () => {
+            setLoading(true);
+            try {
+                const cachedNucleos = await SecureStore.getItemAsync('nucleos');
+                const id = await SecureStore.getItemAsync('id');
+    
+                if (id) setUserId(id);
+
+                if(updateFlag && id){
+                    const numericUserId = parseInt(id, 10);
+                    const responseNucleos = await api.get('/usuarios_nucleos', { params: { usuario_id: numericUserId } });
+                    const fetchedNucleos = responseNucleos.data;
+                    setNucleos(fetchedNucleos);
+                    await SecureStore.setItemAsync('nucleos', JSON.stringify(fetchedNucleos));
                 }
-            };
-            const numericUserId = parseInt(userId, 10);
-            fetchUserNucleos(numericUserId);
+                else if (cachedNucleos) {
+                    setNucleos(JSON.parse(cachedNucleos));
+                } else if (id) {
+                    const numericUserId = parseInt(id, 10);
+                    const responseNucleos = await api.get('/usuarios_nucleos', { params: { usuario_id: numericUserId } });
+                    const fetchedNucleos = responseNucleos.data;
+                    setNucleos(fetchedNucleos);
+                    await SecureStore.setItemAsync('nucleos', JSON.stringify(fetchedNucleos));
+                }
+            } catch (error) {
+                console.error('Erro ao buscar núcleos:', error);
+            } finally {
+                setLoading(false);
+            }
         };
-    }, [userId]); 
-
+    
+        fetchNucleos();
+    }, [updateFlag]);
+    
     useEffect(() => {
-        if (nucleos.length > 0) {
-            const fetchEditaisID = async (nucleosIds: number[]) => {
-                try {
-                    const responseNucleos = await api.get('/nucleos_editais', { 
-                        params:{nucleosIds} 
-                    }); 
-                    const editalIds = responseNucleos.data; 
-
-                    if (editalIds.length === 0) {
-                        console.log("Nenhum edital encontrado para os núcleos fornecidos.");
-                        setLoading(false); 
-                        setEditalId([]); 
-                        return;
-                    };
-                    setEditalId(editalIds);
-                } catch (error) {
-                    console.error("Erro ao buscar id edital", error);
-                    return;
-                }
-            };
-            fetchEditaisID(nucleos);
-        }
-    }, [nucleos]);
-
-    useEffect(() =>{
-        if(editalId.length > 0){
-            const fetchEditais = async (editaisIds: number[]) => {
-                try{
-                    const response = await api.get('/editais',{
-                        params:{id: editaisIds}
-                    });
-                    const editais = response.data;
-                    setEditais(editais); 
-                }catch(error){
-                    console.error('erro ao  buscar editais',error);
-                }  
-            };    
-            const fetchPrazos = async (editaisIds: number[]) => {
-                try{
-                    const response = await api.get('/prazos',{
-                        params:{id: editaisIds}
-                    });
-                    const prazos = response.data;
-                    const updatedEditais = editais.map(edital => ({
+        const fetchEditais = async () => {
+            if (nucleos.length === 0) return;
+    
+            setLoading(true);
+            try {
+                const responseEditaisId = await api.get('/nucleos_editais', { params: { nucleosIds: nucleos } });
+                const editalIds = responseEditaisId.data;
+                setEditalId(editalIds);
+    
+                if (editalIds.length > 0) {
+                    const [editaisResponse, prazosResponse] = await Promise.all([
+                        api.get('/editais', { params: { id: editalIds } }),
+                        api.get('/prazos', { params: { id: editalIds } }),
+                    ]);
+                    const editais = editaisResponse.data;
+                    const prazos = prazosResponse.data;
+    
+                    const updatedEditais = editais.map((edital: Edital) => ({
                         ...edital,
-                        prazos: prazos.filter(
-                            (prazo: Prazo) => prazo.id_edital === edital.id),
-                    })); 
+                        prazos: prazos.filter((prazo: Prazo) => prazo.id_edital === edital.id),
+                    }));
                     setEditais(updatedEditais);
-                }catch(error){
-                    console.error('erro ao  buscar prazos',error);
-                }finally {
-                    setLoading(false);  
+                }else{
+                    setEditais([]);
                 }
-            };    
-            fetchEditais(editalId).then(() => {
-                fetchPrazos(editalId);
-            });
-        }
-    },[editalId]);
-
-    const filteredEditais = editais.filter((edital) => {
-        return edital.titulo.toLowerCase().includes(searchText.toLowerCase());
-    });
+            } catch (error) {
+                console.error('Erro ao buscar editais:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        fetchEditais();
+    }, [nucleos]);
+    
+    
+    const filteredEditais = useMemo(() => {
+        return editais.filter((edital) =>
+            edital.titulo.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }, [editais, searchText]);
 
     const renderItem = ({ item }: { item: Edital }) => (
         <View style={styles.item}>
@@ -151,17 +143,24 @@ export default function Editais() {
                 <View style={styles.dropdown}>
                     <Text style={styles.dropdownItem}>Núcleo: {item.nucleo}</Text>
                     <Text style={styles.dropdownItem}>Descrição: {item.descricao}</Text>
-                    <Text style={styles.dropdownItem}>Edital: {item.link1}</Text>
-                    <Text style={styles.dropdownItem}>SEI: {item.link2}</Text>
+                    <TouchableOpacity onPress={() => Linking.openURL(item.link1)}>
+                        <Text style={styles.dropdownItemLink}>Página do Edital: </Text>
+                        <Text style={styles.dropdownLink}>{item.link1}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => Linking.openURL(item.link2)}>
+                        <Text style={styles.dropdownItemLink}>Edital:</Text>
+                        <Text style={styles.dropdownLink}>{item.link2}</Text>
+                    </TouchableOpacity>
+                    
                     <Text style={styles.dropdownItem}>Cronograma:</Text>
-                    {item.prazos != null ? (
+                    {item.prazos[0] != null ? (
                         item.prazos.map((prazo, index) => (
                             <Text key={index} style={styles.dropdownItem}>
                                 {prazo.descricao}: {prazo.data}
                             </Text>
                         ))
                     ) : (
-                        <Text style={styles.dropdownItem}>Nenhum prazo disponível</Text>
+                        <Text style={styles.dropdownItem}>Cronograma não encontrado</Text>
                     )}
                 </View>
             )}
@@ -211,4 +210,13 @@ export default function Editais() {
         </SafeAreaView>
        
     );
-}
+};
+
+
+const EditaisScreenWithProvider = () => {
+    return (
+        <EditaisProvider>
+            <Editais />
+        </EditaisProvider>
+    );
+};
