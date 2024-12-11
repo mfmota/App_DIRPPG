@@ -1,4 +1,3 @@
-// src/context/EditaisContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 type Prazo = {
@@ -17,18 +16,19 @@ type Edital = {
     prazos: Prazo[];
 };
 
-interface EditaisContextProps {
+interface EditaisContextData {
     editais: Edital[];
     setEditais: React.Dispatch<React.SetStateAction<Edital[]>>;
+ 
 }
 
-const EditaisContext = createContext<EditaisContextProps | undefined>(undefined);
+const EditaisContext = createContext<EditaisContextData | undefined>(undefined);
 
 export const EditaisProvider = ({ children }: { children: ReactNode }) => {
     const [editais, setEditais] = useState<Edital[]>([]);
 
     return (
-        <EditaisContext.Provider value={{ editais, setEditais }}>
+        <EditaisContext.Provider value={{ editais, setEditais}}>
             {children}
         </EditaisContext.Provider>
     );

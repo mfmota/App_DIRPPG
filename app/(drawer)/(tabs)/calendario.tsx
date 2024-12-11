@@ -30,7 +30,7 @@ export type Edital = {
 
 const Editais = () => {
     const fontsLoaded = useGlobalFonts();
-    const [editais, setEditais] = useState<Edital[]>([]);
+    const {editais, setEditais} = useEditais();
     const [nucleos,setNucleos] = useState<number []>([]);
     const [searchText, setSearchText] = useState<string>('');
     const { bottom } = useSafeAreaInsets();
@@ -220,3 +220,5 @@ const EditaisScreenWithProvider = () => {
         </EditaisProvider>
     );
 };
+
+export default EditaisScreenWithProvider;
