@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "scheme": "appCalendario",
     "linking": {
-      "prefixes": ["exp://", "appCalendario://"],
+      "prefixes": [
+        "exp://",
+        "appCalendario://"
+      ],
       "config": {
         "screens": {
           "novaSenha": "novaSenha/:token"
@@ -34,7 +37,8 @@
       "package": "com.appCalendario"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ]
   }
 }
