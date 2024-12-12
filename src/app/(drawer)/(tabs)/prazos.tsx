@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from 'react';
 import { Text, View, TextInput, SafeAreaView, TouchableOpacity, FlatList, ActivityIndicator,Linking } from 'react-native';
-import { styles} from "../../styles";
+import { styles} from "@/app/styles";
 import Feather from '@expo/vector-icons/Feather';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Header } from '~/components/header/header';
-import { Background } from '~/components/Background';
-import { ContainerDrawer } from '~/components/ContainerDrawer';
+import { Header } from '@/components/header/header';
+import { Background } from '@/components/Background';
+import { ContainerDrawer } from '@/components/ContainerDrawer';
 import { differenceInDays } from 'date-fns';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { EditaisProvider, useEditais } from '../../../context/editaisContext';
+import { EditaisProvider, useEditais } from '@/context/editaisContext';
 
 type Prazo = {
     id_edital: string;

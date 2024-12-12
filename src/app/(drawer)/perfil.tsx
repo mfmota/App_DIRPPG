@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, SafeAreaView, TextInput,ActivityIndicator,Alert } from 'react-native';
-import { styles} from "../styles";
+import { styles} from "@/app/styles";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -11,7 +11,7 @@ import { Button } from '@/components/Button';
 import { InputView } from '@/components/InputView';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
-import api from '../../utils/api';
+import api from '@/utils/api';
 import CustomDropdown from '@/components/CustomDropdown';
 import { GlobalEvents } from '@/utils/GlobalEvents';
 

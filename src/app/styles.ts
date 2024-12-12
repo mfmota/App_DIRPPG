@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import * as SplashScreen from 'expo-splash-screen';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
-
+import { fontFamily } from "@/styles/font-family";
 SplashScreen.preventAutoHideAsync();
 
 export const styles = StyleSheet.create({
@@ -30,13 +30,14 @@ export const styles = StyleSheet.create({
         fontSize:40,
         alignSelf:'center',
         paddingBottom:5,
-        fontFamily: 'Montserrat-ExtraBold'
+        fontFamily: fontFamily.extra_bold
     }, 
 
     subTitle:{
         alignSelf:'center',
         fontSize:12,
-        fontFamily: 'Montserrat-SemiBold'
+        fontFamily: fontFamily.semiBold
+
     },
 
     input:{
@@ -60,7 +61,7 @@ export const styles = StyleSheet.create({
         fontSize:20,
         marginBottom:'10%',
         alignSelf:'center',
-        fontFamily: 'Montserrat-ExtraBold'
+        fontFamily: fontFamily.extra_bold
      },
  
      txtSenha:{
@@ -69,13 +70,13 @@ export const styles = StyleSheet.create({
          alignSelf:'flex-end',
          marginRight:'12%',
          paddingBottom:'5%',
-         fontFamily:'Montserrat-ExtraBold'
+         fontFamily:fontFamily.extra_bold
      },
  
  //---------------------------------Redef Senha--------------------------------------------------------
 
      txt1:{
-        fontFamily:'Montserrat-ExtraBold',
+        fontFamily:fontFamily.extra_bold,
         fontSize:18,
         alignSelf:'center',
         marginBottom:'2%',
@@ -83,7 +84,7 @@ export const styles = StyleSheet.create({
      },
 
      txt2:{
-        fontFamily:'Montserrat-Regular',
+        fontFamily:fontFamily.regular,
         fontSize:10,
         marginBottom:'10%',
         alignSelf:'center',
@@ -128,8 +129,8 @@ export const styles = StyleSheet.create({
     },
 
     filterText: {
-        fontFamily:'Montserrat-Regular',
-         fontSize: 12,
+        fontFamily:fontFamily.regular,
+        fontSize: 12,
      },
      
      dropdownItem: {
@@ -150,12 +151,12 @@ export const styles = StyleSheet.create({
     },
 
     txtData:{
-        fontFamily:'Montserrat-SemiBold',
+        fontFamily:fontFamily.semiBold,
         fontSize:10,
     },
 
     txtEvento:{
-        fontFamily:'Montserrat-Bold',
+        fontFamily:fontFamily.bold,
         fontSize:12,
     },
 
@@ -188,7 +189,7 @@ export const styles = StyleSheet.create({
     },
 
     prazosTitle:{
-        fontFamily:'Montserrat-ExtraBold',
+        fontFamily:fontFamily.extra_bold,
         alignSelf:'center',
         textAlign:'center',
         width:'80%',

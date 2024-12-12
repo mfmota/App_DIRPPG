@@ -3,18 +3,8 @@
     "name": "appCalendario",
     "slug": "appCalendario",
     "version": "1.0.0",
+    "icon": "./assets/images/icon.png",
     "scheme": "appCalendario",
-    "linking": {
-      "prefixes": [
-        "exp://",
-        "appCalendario://"
-      ],
-      "config": {
-        "screens": {
-          "novaSenha": "novaSenha/:token"
-        }
-      }
-    },
     "platforms": [
       "ios",
       "android",
@@ -23,8 +13,9 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./assets/images/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1e39be"
     },
     "ios": {
       "bundleIdentifier": "com.appCalendario",
@@ -32,7 +23,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#1e39be"
       },
       "package": "com.appCalendario"
     },

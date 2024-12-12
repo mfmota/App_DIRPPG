@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useMemo } from 'react';
 import { Text, View, TextInput, SafeAreaView, TouchableOpacity, FlatList,ActivityIndicator, Linking } from 'react-native';
-import { styles } from "../../styles";
+import { styles } from "@/app/styles";
 import api from '@/utils/api';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
@@ -10,7 +10,7 @@ import { Background } from '@/components/Background';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import { GlobalEvents } from '@/utils/GlobalEvents';
-import { EditaisProvider, useEditais } from '../../../context/editaisContext';
+import { EditaisProvider, useEditais } from '@/context/editaisContext';
 
 export type Prazo = {
     id_edital: string;

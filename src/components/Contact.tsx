@@ -2,9 +2,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import {StyleSheet, Text, TouchableOpacity, View,Linking,Platform } from 'react-native';
 import Foundation from '@expo/vector-icons/Foundation';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import{useGlobalFonts} from '../src/app/styles'
-
-
+import { fontFamily } from '@/styles/font-family';
 type ContactProps = {
     secretaria?:string;
     email?: string;
@@ -43,11 +41,6 @@ const Contact:  React.FC <ContactProps> = ({
     tel,
     local,
 }) => {
-    const fontsLoaded = useGlobalFonts();
-
-    if (!fontsLoaded) {
-        return null; 
-    }
         return( 
 
             <View style={styles.container}>
@@ -89,7 +82,7 @@ const Contact:  React.FC <ContactProps> = ({
     },
 
     txtContato:{
-        fontFamily:'Montserrat-SemiBold',
+        fontFamily:fontFamily.semiBold,
         width:'80%',
     },   
     subTitle:{

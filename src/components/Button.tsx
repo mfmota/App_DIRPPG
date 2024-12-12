@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, } from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
-
+import { fontFamily } from '@/styles/font-family';
 type ButtonProps = {
   title?: string;
 } & TouchableOpacityProps;
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     alignSelf:'center',
-    fontFamily:'Montserrat-ExtraBold',
+    fontFamily:fontFamily.extra_bold,
     fontSize:13
   },
 });

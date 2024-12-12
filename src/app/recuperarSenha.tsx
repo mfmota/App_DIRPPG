@@ -3,14 +3,13 @@ import {Text,View,TextInput,SafeAreaView, Pressable} from 'react-native';
 import{styles} from "./styles";
 import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Button } from '@/components/Button';
 import { Container } from '@/components/Container';
 import { Background } from '@/components/Background';
 import { Footer } from '@/components/footer/footer';
 import { InputView } from '@/components/InputView';
 import TXTOptions from '@/components/TXTOption';
-import api from '../utils/api';
+import api from '@/utils/api';
 
 export default function recuperarSenha(){
 

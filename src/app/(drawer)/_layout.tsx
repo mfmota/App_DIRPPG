@@ -20,54 +20,60 @@ export default function DrawerLayout (){
     return <Loading/>
   }
 
-  <Drawer drawerContent={customLayout} 
-  screenOptions={{headerShown:false, 
-  drawerHideStatusBarOnOpen:true,
-  drawerLabelStyle:{marginLeft:-20}}}>
+  return(
+    <Drawer drawerContent={customLayout} 
+    screenOptions={{headerShown:false, 
+    drawerHideStatusBarOnOpen:true,
+    drawerLabelStyle:{marginLeft:-20}}}>
 
-   
-    <Drawer.Screen
-      name="(tabs)"
-      options={{
-        drawerLabel:'Calendário',
-        drawerIcon: ({}) => (
-          <AntDesign name="calendar" size={24} color="black" />
-        ),
-      }}
+    
+      <Drawer.Screen
+        name="(tabs)"
+        options={{
+          drawerLabel:'Calendário',
+          drawerLabelStyle:{fontFamily:'Montserrat_600SemiBold'},
+          drawerIcon: ({}) => (
+            <AntDesign name="calendar" size={24} color="black" />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="site"
+        options={{
+          drawerLabel:'Site',
+          drawerLabelStyle:{fontFamily:'Montserrat_600SemiBold'},
+          drawerIcon: ({}) => (
+            <AntDesign name="earth" size={24} color="black" />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="contato"
+        options={{
+          title: 'Contato',
+          drawerLabel:'Contato',
+          drawerLabelStyle:{fontFamily:'Montserrat_600SemiBold'},
+          drawerIcon: ({}) => (
+            <MaterialIcons name="support-agent" size={24} color="black" />
+          ),
+        }}
+      />
+
+      <Drawer.Screen
+        name="perfil"
+        options={{
+          title: 'perfil',
+          drawerLabel:'Perfil',
+          drawerLabelStyle:{fontFamily:'Montserrat_600SemiBold'},
+          drawerIcon: ({}) => (
+            <FontAwesome5 name="user-edit" size={24} color="black" />
+          ),
+        }}
     />
-
-    <Drawer.Screen
-      name="site"
-      options={{
-        drawerLabel:'Site',
-        drawerIcon: ({}) => (
-          <AntDesign name="earth" size={24} color="black" />
-        ),
-      }}
-    />
-
-    <Drawer.Screen
-      name="contato"
-      options={{
-        title: 'Contato',
-        drawerLabel:'Contato',
-        drawerIcon: ({}) => (
-          <MaterialIcons name="support-agent" size={24} color="black" />
-        ),
-      }}
-    />
-
-    <Drawer.Screen
-      name="perfil"
-      options={{
-        title: 'perfil',
-        drawerLabel:'Perfil',
-        drawerIcon: ({}) => (
-          <FontAwesome5 name="user-edit" size={24} color="black" />
-        ),
-      }}
-  />
-  </Drawer>
+    </Drawer>
+  );
 };
 
 

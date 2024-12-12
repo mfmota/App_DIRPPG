@@ -12,7 +12,7 @@ import { Background } from '@/components/Background';
 import { InputView } from '@/components/InputView';
 import { Footer } from '@/components/footer/footer';
 import TXTOptions from '@/components/TXTOption'; 
-import api from '../utils/api';
+import api from '@/utils/api';
 import * as SecureStore from 'expo-secure-store';
 
 export default function Login(){
@@ -42,7 +42,7 @@ export default function Login(){
             await SecureStore.setItemAsync('nome', usuario.nome);
             await SecureStore.setItemAsync('email', usuario.email);
                     
-            router.push('../(tabs)/calendario');
+            router.push('/(tabs)/calendario');
 
         } catch (error) {
             Alert.alert('Email ou senha incorretos');

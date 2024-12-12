@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet,View,ViewStyle} from 'react-native';
-import Logo from "../../assets/images/logoDIRPPG.png";
+import Logo from "@/assets/images/logoDIRPPG.png";
 import { Image, ImageStyle } from 'expo-image';
 import { heightPercentageToDP as hp} from 'react-native-responsive-screen'
 

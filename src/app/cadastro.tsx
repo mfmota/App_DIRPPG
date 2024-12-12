@@ -14,7 +14,7 @@ import { InputView } from '@/components/InputView';
 import CustomDropdown from '@/components/CustomDropdown';
 import { Footer } from '@/components/footer/footer';
 import TXTOptions from '@/components/TXTOption';
-import api from '../utils/api';
+import api from '@/utils/api';
 
 const Cadastro: React.FC = () => {
 

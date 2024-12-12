@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
-
+import { fontFamily } from '@/styles/font-family';
 type OptionProps = {
     title1?: string;
     title2?: string;
@@ -29,14 +29,14 @@ type OptionProps = {
         fontSize:10,
         justifyContent:'flex-start',
         marginLeft:'20%',
-        fontFamily:'Montserrat-Regular'
+        fontFamily:fontFamily.regular
     },
 
     txtResposta:{
         fontSize:10,
        justifyContent:'flex-end',
        textDecorationLine:'underline',
-       fontFamily:'Montserrat-ExtraBold',
+       fontFamily:fontFamily.extra_bold,
        marginLeft:2,
     },
 });

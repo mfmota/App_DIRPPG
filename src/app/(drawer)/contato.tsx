@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {Text,View,SafeAreaView,ActivityIndicator} from 'react-native'
-import{styles} from "../styles"
+import{styles} from "@/app/styles"
 import {Header} from '@/components/header/header';
 import { Background } from '@/components/Background';
 import { Container } from '@/components/Container';

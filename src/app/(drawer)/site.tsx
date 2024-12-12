@@ -1,9 +1,9 @@
 import React from 'react';
 import {SafeAreaView,View,ActivityIndicator} from 'react-native';
 import {WebView} from 'react-native-webview';
-import {Header} from '~/components/header/header';
-import { Background } from '~/components/Background';
-import { styles } from '../styles';
+import {Header} from '@/components/header/header';
+import { Background } from '@/components/Background';
+import { styles } from '@/app/styles';
 
 export default function site(){
     

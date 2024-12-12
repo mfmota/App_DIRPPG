@@ -2,7 +2,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native';
 
 interface ContainerDrawerProps {
     children: React.ReactNode;
-    style?: ViewStyle; // Permite passar estilos adicionais
+    style?: ViewStyle; 
   }
 
   export const ContainerDrawer = ({ children, style }: ContainerDrawerProps) => {

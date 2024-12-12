@@ -1,5 +1,5 @@
 import React, { useState, useRef,useEffect } from 'react';
-import {View,Text,TextInput,TouchableOpacity,FlatList,StyleSheet,Dimensions,} from 'react-native';
+import {View,Text,TextInput,TouchableOpacity,FlatList,StyleSheet} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { FontAwesome } from '@expo/vector-icons';
 
