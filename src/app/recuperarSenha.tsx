@@ -3,7 +3,7 @@ import {Text,View,TextInput,SafeAreaView, Pressable} from 'react-native';
 import{styles} from "./styles";
 import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/button';
 import { Container } from '@/components/Container';
 import { Background } from '@/components/Background';
 import { Footer } from '@/components/footer/footer';
@@ -52,11 +52,10 @@ export default function recuperarSenha(){
                             />
                         </InputView>
                         
-                        <Button
-                        title='Enviar'
-                        onPress={solicitarRedefinicaoSenha}
-                        style={{width:'35%'}}
-                        />
+                        <Button  style={{width:'35%'}} onPress={solicitarRedefinicaoSenha}>
+                            <Button.Title>Enviar</Button.Title>
+                        </Button>
+                        
                         <TXTOptions
                         title1=''
                         title2='Voltar'

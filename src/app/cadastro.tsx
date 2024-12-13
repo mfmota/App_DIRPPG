@@ -1,17 +1,13 @@
 import React ,{useState}  from 'react';
-import {Text,View,TextInput,SafeAreaView,Alert,TouchableOpacity,ActivityIndicator} from 'react-native';
+import {Text,View,SafeAreaView,Alert,ActivityIndicator} from 'react-native';
 import{styles} from "./styles";
 import { router } from 'expo-router';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Feather from '@expo/vector-icons/Feather';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/button';
 import { Container } from '@/components/Container';
 import { Background } from '@/components/Background';
-import { InputView } from '@/components/InputView';
-import CustomDropdown from '@/components/CustomDropdown';
+import { InputCadastro } from '@/components/inputs/input';
+import CustomDropdown from '@/components/dropdown';
 import { Footer } from '@/components/footer/footer';
 import TXTOptions from '@/components/TXTOption';
 import api from '@/utils/api';
@@ -25,11 +21,6 @@ const Cadastro: React.FC = () => {
     const [senha, setSenha] = useState<string>('');
     const [senhaConf, setSenhaConf] = useState<string>('');
     const [nucleoSelecionados, setNucleoSelecionados] = useState<string[]>([]);
-    const [showSenha, setShowSenha] = useState<boolean>(false);
-    const [showSenhaConf, setShowSenhaConf] = useState<boolean>(false);
-
-    const toggleSenhaVisibility = () => setShowSenha((prev) => !prev);
-    const toggleSenhaConfVisibility = () => setShowSenhaConf((prev) => !prev);
 
     const addBd = async () =>{
         if(nome === '' ||email === '' ||senha === '' || senhaConf ==''){
@@ -97,64 +88,22 @@ const Cadastro: React.FC = () => {
                             </View>
     
                             <View style={[styles.boxMiddle, { overflow: "visible", height: hp(35) }]}>
-                                <InputView>
-                                    <Ionicons style={styles.iconInput} name="person" size={18} color="black" />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="| Nome"
-                                        value={nome}
-                                        onChangeText={setNome}
-                                    />
-                                </InputView>
-    
-                                <InputView>
-                                    <MaterialIcons style={styles.iconInput} name="email" size={18} color="black" />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="| Email"
-                                        keyboardType="email-address"
-                                        autoComplete="email"
-                                        value={email}
-                                        onChangeText={setEmail}
-                                    />
-                                </InputView>
-    
+                                
                                 <CustomDropdown
                                     selectedValues={nucleoSelecionados}
                                     onSelect={setNucleoSelecionados}
                                 />
-    
-                                <InputView>
-                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="| Senha"
-                                        secureTextEntry={!showSenha}
-                                        value={senha}
-                                        onChangeText={setSenha}
-                                    />
-                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={toggleSenhaVisibility}>
-                                        <Feather style={styles.secondIcon} name={showSenha ? 'eye-off' : 'eye'} size={18} color="black" />
-                                    </TouchableOpacity>
-                                </InputView>
-    
-                                <InputView>
-                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="| Confirme a Senha"
-                                        secureTextEntry={!showSenhaConf}
-                                        value={senhaConf}
-                                        onChangeText={setSenhaConf}
-                                    />
-                                    <TouchableOpacity style={{ alignSelf: 'center' }} onPress={toggleSenhaConfVisibility}>
-                                        <Feather style={styles.secondIcon} name={showSenhaConf ? 'eye-off' : 'eye'} size={18} color="black" />
-                                    </TouchableOpacity>
-                                </InputView>
+
+                                <InputCadastro nome={nome} email={email} senha={senha} senhaConf={senhaConf} 
+                                setNome={setNome} setEmail={setEmail} setSenha={setSenha} 
+                                setSenhaConf={setSenhaConf}/>
+                                
                             </View>
     
                             <View style={[styles.boxBottom, { height: hp(15) }]}>
-                                <Button title="Criar Conta" onPress={addBd} />
+                                <Button onPress={addBd} >
+                                    <Button.Title>Cadastrar</Button.Title>
+                                </Button>
                                 <TXTOptions
                                     title1="Já tem conta?"
                                     title2="Faça Login"

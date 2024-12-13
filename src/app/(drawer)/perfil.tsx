@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, SafeAreaView, TextInput,ActivityIndicator,Alert } from 'react-native';
+import { Text, View, SafeAreaView, ActivityIndicator,Alert } from 'react-native';
 import { styles} from "@/app/styles";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Header } from '@/components/header/header';
 import { Background } from '@/components/Background';
-import { Button } from '@/components/Button';
-import { InputView } from '@/components/InputView';
+import { Button } from '@/components/button';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import api from '@/utils/api';
-import CustomDropdown from '@/components/CustomDropdown';
+import CustomDropdown from '@/components/dropdown';
+import { InputCadastro } from '@/components/inputs/input';
 import { GlobalEvents } from '@/utils/GlobalEvents';
 
 export default function Perfil() {
@@ -152,51 +149,18 @@ export default function Perfil() {
                             </View>
 
                             <View style={[styles.boxMiddle, { overflow: "visible", height: hp(35) }]}>
-                                <InputView>
-                                    <Ionicons style={styles.iconInput} name="person" size={18} color="black" />
-                                    <TextInput style={styles.input}
-                                        placeholder="| Nome"
-                                        value={nome || ''}
-                                        onChangeText={setNome}
-                                    />
-                                </InputView>
-                                <InputView>
-                                    <MaterialIcons style={styles.iconInput} name="email" size={18} color="black" />
-                                    <TextInput style={styles.input}
-                                        placeholder='email'
-                                        keyboardType='email-address'
-                                        autoComplete='email'
-                                        value={email || ''}
-                                        onChangeText={setEmail}
-                                    />
-                                </InputView>
                                 <CustomDropdown
                                 selectedValues={nucleosSelecionados}
                                 onSelect={setNucleosSelecionados}
                                 />
-                                <InputView>
-                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
-                                    <TextInput style={styles.input}
-                                        placeholder="| Senha"
-                                        secureTextEntry
-                                        value={senha}
-                                        onChangeText={setSenha}
-                                    />
-                                </InputView>
-                                <InputView>
-                                    <Fontisto style={styles.iconInput} name="locked" size={17} color="black" />
-                                    <TextInput style={styles.input}
-                                        placeholder="| Confirme a Senha"
-                                        secureTextEntry
-                                        value={senhaConf}
-                                        onChangeText={setSenhaConf}
-                                    />
-                                </InputView>
-                                <Button
-                                    title='Atualizar'
-                                    style={{marginTop:'15%'}}
-                                    onPress={confirmarAtualizacao}
-                                />
+                              
+                                <InputCadastro nome={nome || ''} email={email || ''} senha={senha} senhaConf={senhaConf} 
+                                    setNome={setNome} setEmail={setEmail} setSenha={setSenha} 
+                                    setSenhaConf={setSenhaConf}/>
+                             
+                                <Button style={{marginTop:'15%'}} onPress={confirmarAtualizacao}>
+                                    <Button.Title>Atualizar</Button.Title>
+                                </Button>
                             </View>
                         
                         </>

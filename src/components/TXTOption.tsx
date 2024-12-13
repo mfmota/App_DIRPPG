@@ -26,14 +26,14 @@ type OptionProps = {
        flexDirection:'row',
     },
     txtPergunta:{
-        fontSize:10,
+        fontSize:12,
         justifyContent:'flex-start',
-        marginLeft:'20%',
+        marginLeft:'15%',
         fontFamily:fontFamily.regular
     },
 
     txtResposta:{
-        fontSize:10,
+        fontSize:12,
        justifyContent:'flex-end',
        textDecorationLine:'underline',
        fontFamily:fontFamily.extra_bold,

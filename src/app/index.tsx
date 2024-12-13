@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
-import {Text,View,TextInput,SafeAreaView, Pressable,Alert,TouchableOpacity} from 'react-native'
+import {Text,View,SafeAreaView, Pressable,Alert} from 'react-native'
 import{styles} from "./styles"
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {useRouter} from 'expo-router'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import Feather from '@expo/vector-icons/Feather';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/button';
 import { Container } from '@/components/Container';
 import { Background } from '@/components/Background';
-import { InputView } from '@/components/InputView';
 import { Footer } from '@/components/footer/footer';
+import { InputLogin } from '@/components/inputs/inputLogin';
 import TXTOptions from '@/components/TXTOption'; 
 import api from '@/utils/api';
 import * as SecureStore from 'expo-secure-store';
@@ -21,10 +18,7 @@ export default function Login(){
     const [senha, setSenha] = useState('');
     const router= useRouter();
     const [loading, setLoading] = useState(false);
-    const [showSenha, setShowSenha] = useState<boolean>(false);
-
-    const toggleSenhaVisibility = () => setShowSenha((prev) => !prev);
-
+ 
     const userLogin = async () => {
         
         try {
@@ -70,57 +64,26 @@ export default function Login(){
 
                         <View style={[styles.boxMiddle,{height:hp(25)}]}>
                             <Text style={styles.txtLogin}>Login</Text>  
-                            <InputView >
-                                <MaterialIcons style={styles.iconInput}name="email" size={18} color="black" />
-                                <TextInput 
-                                style={styles.input}
-                                placeholder=" | Email"
-                                keyboardType='email-address'
-                                autoComplete='email'
-                                value={email}
-                                onChangeText={setEmail}
-                                />
-                            </InputView>
-
-                            <InputView>
-                                <Fontisto style={styles.iconInput}name="locked" size={16} color="black" />
-                                <TextInput style={styles.input}  
-                                    placeholder=" | Senha"
-                                    autoCapitalize='none'
-                                    secureTextEntry={!showSenha}
-                                    value={senha}
-                                    onChangeText={setSenha}
-                                />
-                                <TouchableOpacity style={{alignSelf:'center'}} onPress={toggleSenhaVisibility}>
-                                    <Feather style={styles.secondIcon} name={showSenha ? 'eye-off' : 'eye'}size={18} color="black"/>
-                                </TouchableOpacity>
-                            </InputView>
-
+                            <InputLogin email={email} senha={senha} setEmail={setEmail} setSenha={setSenha}/>
                             <Pressable onPress={redefinirSenha}>
                                 <Text style={styles.txtSenha}>Esqueci minha senha</Text>
-                            </Pressable>   
-
+                            </Pressable> 
                         </View>
 
-                        <View style={[styles.boxBottom,{height:hp(20)}]}>
-                            <Button
-                            title='Entrar'
-                            onPress={userLogin}
+                        <View style={[styles.boxBottom,{height:hp(20)}]}>   
+                            <Button onPress={userLogin}>
+                                <Button.Title>Entrar</Button.Title>
+                            </Button>
+
+                            <TXTOptions
+                            title1='Não tem uma conta?'
+                            title2='Cadastre-se'
+                            onPress={cadastro}
                             />
-
-                        <TXTOptions
-                        title1='Não tem uma conta?'
-                        title2='Cadastre-se'
-                        onPress={cadastro}
-                        />
-
                         </View>
-
                     <Footer/>
-                    </Container>   
+                </Container>   
             </Background>
         </SafeAreaView>
-        
     );
-
 }

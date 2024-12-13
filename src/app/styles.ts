@@ -40,21 +40,6 @@ export const styles = StyleSheet.create({
 
     },
 
-    input:{
-        marginLeft:'2%',
-        width:'70%'
-    },
-
-    iconInput:{
-        alignSelf:'center',
-        marginLeft:'6%'
-    },
-
-    secondIcon:{
-        alignSelf:'center',
-        marginRight:'10%',
-    },
-
 //--------------------------------Index-----------------------------------
     
     txtLogin:{
@@ -65,10 +50,11 @@ export const styles = StyleSheet.create({
      },
  
      txtSenha:{
-         fontSize:10,
+         fontSize:12,
          textDecorationLine:'underline',
          alignSelf:'flex-end',
          marginRight:'12%',
+         marginTop:3,
          paddingBottom:'5%',
          fontFamily:fontFamily.extra_bold
      },

@@ -1,6 +1,6 @@
+import {s} from "./styles"
 import React, { useState, useRef,useEffect } from 'react';
 import {View,Text,TextInput,TouchableOpacity,FlatList,StyleSheet} from 'react-native';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {IconUsersGroup} from "@tabler/icons-react-native"
 
 interface DropdownItem {
@@ -75,16 +75,16 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     : data;
 
   return (
-    <View style={styles.container}>
+    <View style={s.container}>
       <TouchableOpacity
-        style={[styles.dropdownHeader, { height: isOpen ? 70 : 50 }]}
+        style={[s.dropdownHeader, { height: isOpen ? 70 : 50 }]}
         onPress={toggleDropdown}
       >
-        <View style={styles.headerContent}>
+        <View style={s.headerContent}>
           {!selected.length && (
-            <IconUsersGroup/>
+            <IconUsersGroup style = {s.icon}/>
           )}
-          <Text style={styles.selectedText}>
+          <Text style={s.selectedText}>
             {selected.length
               ? data
                   .filter((item) => selected.includes(item.id))
@@ -95,9 +95,9 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         </View>
       </TouchableOpacity>
       {isOpen &&(
-        <View style={styles.dropdownList}>
+        <View style={s.dropdownList}>
           <TextInput
-            style={styles.searchInput}
+            style={s.searchInput}
             placeholder="Pesquise"
             value={search}
             onChangeText={setSearch}
@@ -112,12 +112,12 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={[
-                  styles.dropdownItem,
-                  selected.includes(item.id) && styles.selectedItem,
+                  s.dropdownItem,
+                  selected.includes(item.id) && s.selectedItem,
                 ]}
                 onPress={() => handleSelect(item.id)}
               >
-                <Text style={styles.itemText}>{item.name}</Text>
+                <Text style={s.itemText}>{item.name}</Text>
               </TouchableOpacity>
             )}
             contentContainerStyle={{ paddingBottom: 10 }}
@@ -127,66 +127,5 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    width: '80%',
-    alignSelf: 'center',
-    marginBottom: 12,
-  },
-  dropdownHeader: {
-    width: '100%',
-    borderRadius: 40,
-    backgroundColor: '#e8ebfa',
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  selectedText: {
-    fontSize: 14,
-    color: '#a1a1a1',
-
-  },
-  dropdownList: {
-    position: 'absolute',
-    top: '90%',
-    width: '100%',
-    maxHeight:hp(35),
-    backgroundColor: '#e8ebfa',
-    borderRadius: 20,
-    zIndex: 1000,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  searchInput: {
-    height: 40,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    marginHorizontal: 10,
-    paddingHorizontal: 10,
-    marginBottom: 5,
-  },
-  dropdownItem: {
-    padding: 10,
-    marginHorizontal: 10,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    marginBottom: 5,
-  },
-  selectedItem: {
-    backgroundColor: '#c8d4ff',
-  },
-  itemText: {
-    fontSize: 14,
-    color: '#000',
-  },
-});
 
 export default CustomDropdown;

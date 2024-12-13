@@ -8,7 +8,7 @@ import { Background } from '@/components/Background';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
 import { differenceInDays } from 'date-fns';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { EditaisProvider, useEditais } from '@/context/editaisContext';
+import { useEditais } from '@/context/editaisContext';
 
 type Prazo = {
     id_edital: string;
@@ -27,7 +27,7 @@ type Edital = {
     prazos: Prazo[];
 };
 
-const Prazos = () => {
+export default function Prazos ()  {
 
     const { editais } = useEditais();
     const [searchText, setSearchText] = useState('');
@@ -165,12 +165,3 @@ const Prazos = () => {
     );
 };
 
-const PrazoScreenWithProvider = () => {
-    return (
-        <EditaisProvider>
-            <Prazos />
-        </EditaisProvider>
-    );
-};
-
-export default PrazoScreenWithProvider;

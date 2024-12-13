@@ -10,7 +10,7 @@ import { Background } from '@/components/Background';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import { GlobalEvents } from '@/utils/GlobalEvents';
-import { EditaisProvider, useEditais } from '@/context/editaisContext';
+import { useEditais } from '@/context/editaisContext';
 
 export type Prazo = {
     id_edital: string;
@@ -28,7 +28,7 @@ export type Edital = {
     prazos: Prazo[];
 };
 
-const Editais = () => {
+export default function Editais ()  {
     const {editais, setEditais} = useEditais();
     const [nucleos,setNucleos] = useState<number []>([]);
     const [searchText, setSearchText] = useState<string>('');
@@ -207,13 +207,3 @@ const Editais = () => {
     );
 };
 
-
-const EditaisScreenWithProvider = () => {
-    return (
-        <EditaisProvider>
-            <Editais />
-        </EditaisProvider>
-    );
-};
-
-export default EditaisScreenWithProvider;
