@@ -1,41 +1,17 @@
-import React, { useState, useEffect,useMemo } from 'react';
-import { Text, View, TextInput, SafeAreaView, TouchableOpacity, FlatList,ActivityIndicator, Linking } from 'react-native';
-import { styles } from "@/app/styles";
+import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Feather from '@expo/vector-icons/Feather';
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Header } from '@/components/header/header';
-import { Background } from '@/components/Background';
-import { ContainerDrawer } from '@/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import { GlobalEvents } from '@/utils/GlobalEvents';
-import { useEditais } from '@/context/editaisContext';
-
-export type Prazo = {
-    id_edital: string;
-    descricao:string;
-    data:string;
-};
-
-export type Edital = {
-    id: string;
-    nucleo:string;
-    link1:string;
-    link2:string;
-    descricao: string;
-    titulo: string;
-    prazos: Prazo[];
-};
+import { useEditais, Edital,Prazo } from '@/context/editaisContext';
+import { SafeAreaView } from "react-native";
+import { ListEditais } from '@/components/listEditais';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Editais ()  {
     const {editais, setEditais} = useEditais();
     const [nucleos,setNucleos] = useState<number []>([]);
-    const [searchText, setSearchText] = useState<string>('');
-    const { bottom } = useSafeAreaInsets();
     const [userId, setUserId] = useState<string | null>(null);
     const [editalId, setEditalId] = useState<number []>([]);
-    const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false); 
     const [updateFlag, setUpdateFlag] = useState<boolean>(false);
 
@@ -120,90 +96,14 @@ export default function Editais ()  {
         fetchEditais();
     }, [nucleos]);
     
-    
-    const filteredEditais = useMemo(() => {
-        return editais.filter((edital) =>
-            edital.titulo.toLowerCase().includes(searchText.toLowerCase())
-        );
-    }, [editais, searchText]);
-
-    const renderItem = ({ item }: { item: Edital }) => (
-        <View style={styles.item}>
-            <TouchableOpacity
-                style={styles.list}
-                onPress={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}>
-                <View style={{ flexDirection: 'column', width: '90%' }}>
-                    <Text style={styles.txtEvento}>{item.titulo}</Text>
-                </View>
-                <AntDesign style={{ justifyContent: 'flex-end' }} name={expandedItemId === item.id ? "up" : "down"} size={18} color="black" />
-            </TouchableOpacity>
-
-            {expandedItemId === item.id && (
-                <View style={styles.dropdown}>
-                    <Text style={styles.dropdownItem}>Núcleo: {item.nucleo}</Text>
-                    <Text style={styles.dropdownItem}>Descrição: {item.descricao}</Text>
-                    <TouchableOpacity onPress={() => Linking.openURL(item.link1)}>
-                        <Text style={styles.dropdownItemLink}>Página do Edital: </Text>
-                        <Text style={styles.dropdownLink}>{item.link1}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => Linking.openURL(item.link2)}>
-                        <Text style={styles.dropdownItemLink}>Edital:</Text>
-                        <Text style={styles.dropdownLink}>{item.link2}</Text>
-                    </TouchableOpacity>
-                    
-                    <Text style={styles.dropdownItem}>Cronograma:</Text>
-                    {item.prazos[0] != null ? (
-                        item.prazos.map((prazo, index) => (
-                            <Text key={index} style={styles.dropdownItem}>
-                                {prazo.descricao}: {prazo.data}
-                            </Text>
-                        ))
-                    ) : (
-                        <Text style={styles.dropdownItem}>Cronograma não encontrado</Text>
-                    )}
-                </View>
-            )}
-        </View>
-    );
-
     return (
-        <SafeAreaView>
-            <Background>
-                <Header />
-                <ContainerDrawer style={{ paddingBottom: bottom }}>
-                    <View style={[styles.boxTop]}>
-                        <View style={styles.buscaContainer}>
-                            <View style={styles.inputViewAgenda}>
-                                <TextInput
-                                    style={styles.inputAgenda}
-                                    placeholder='Pesquisar'
-                                    placeholderTextColor='#ddd'
-                                    value={searchText}
-                                    onChangeText={(t) => setSearchText(t)} />
-                                <Feather style={styles.iconAgenda} name="search" size={16} color="black" />
-                            </View>
-                        </View>
-                    </View>
-
-
-                    <View style={[styles.boxMiddle, { height: '100%' }]}>
-                        {loading ? (
-                            <ActivityIndicator size="large" color="#0000ff" />
-                        ) : filteredEditais.length == 0 ? (
-                            <Text>Não há editais disponíveis.</Text>
-                            
-                        ) : (
-                            <FlatList
-                                data={filteredEditais}
-                                renderItem={renderItem}
-                                keyExtractor={item => item.id}
-                            />
-                        )}
-                    </View>
-                </ContainerDrawer>
-            </Background>
-        </SafeAreaView>
-       
+        <SafeAreaProvider>
+            <ListEditais
+            editais={editais}
+            loading = {loading}
+            />
+        </SafeAreaProvider>
+        
     );
 };
 

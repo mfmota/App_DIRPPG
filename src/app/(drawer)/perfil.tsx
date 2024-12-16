@@ -9,7 +9,7 @@ import { ContainerDrawer } from '@/components/ContainerDrawer';
 import * as SecureStore from 'expo-secure-store';
 import api from '@/utils/api';
 import CustomDropdown from '@/components/dropdown';
-import { InputCadastro } from '@/components/inputs/input';
+import { InputCadastro } from '@/components/inputs/inputCadastro';
 import { GlobalEvents } from '@/utils/GlobalEvents';
 
 export default function Perfil() {
@@ -162,9 +162,7 @@ export default function Perfil() {
                                     <Button.Title>Atualizar</Button.Title>
                                 </Button>
                             </View>
-                        
                         </>
-
                     )}
                 </ContainerDrawer>
             </Background>

@@ -6,7 +6,7 @@ import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Button } from '@/components/button';
 import { Container } from '@/components/Container';
 import { Background } from '@/components/Background';
-import { InputCadastro } from '@/components/inputs/input';
+import { InputCadastro } from '@/components/inputs/inputCadastro';
 import CustomDropdown from '@/components/dropdown';
 import { Footer } from '@/components/footer/footer';
 import TXTOptions from '@/components/TXTOption';

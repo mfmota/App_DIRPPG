@@ -78,35 +78,6 @@ export const styles = StyleSheet.create({
  
 //--------------------------------------AGENDA-----------------------------------------------------------------
 
-    buscaContainer: {
-        flexDirection: 'row',  
-        marginTop:'3%',
-        marginLeft:'10%',
-        overflow:'hidden'
-    },
-
-    inputViewAgenda:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        height: '65%',
-        width:'75%',
-        borderRadius:20,
-        backgroundColor:'#e8ebfa',  
-        marginLeft:'5%',
-        paddingBottom:'2%',
-        marginTop:'3%'
-    },
-
-    inputAgenda:{
-       marginTop:'3%',
-       marginLeft:'4%',
-    },
-
-    iconAgenda:{
-        marginRight:'5%',
-        marginTop:'2%'
-    },
-
     dropdown: {
         backgroundColor: '#fff',
         borderRadius: 5,
@@ -182,16 +153,6 @@ export const styles = StyleSheet.create({
         fontSize:22,
     },
 
-//--------------------------------SITE---------------------------------------------
-    site:{
-        height:hp(80),
-        backgroundColor:'white',
-        borderRadius:20,
-        marginTop:'15%',
-        marginBottom:'12%',
-        marginHorizontal:'6%',
-        overflow:'hidden'
-    },    
 
 
 })

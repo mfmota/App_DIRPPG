@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
-import {Text,View,TextInput,SafeAreaView, Pressable} from 'react-native';
+import {Text,View,SafeAreaView} from 'react-native';
 import{styles} from "./styles";
 import { useRouter } from 'expo-router';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {IconMail} from "@tabler/icons-react-native"
 import { Button } from '@/components/button';
 import { Container } from '@/components/Container';
 import { Background } from '@/components/Background';
 import { Footer } from '@/components/footer/footer';
-import { InputView } from '@/components/InputView';
 import TXTOptions from '@/components/TXTOption';
 import api from '@/utils/api';
+import { Input } from '@/components/input';
 
 export default function recuperarSenha(){
 
@@ -41,25 +41,25 @@ export default function recuperarSenha(){
 
                         <Text style={styles.txt1}>Esqueceu a senha?</Text>
                         <Text style={[styles.txt2,,{fontSize:12}]}>Informe seu email cadastrado para continuar</Text>
-                        <InputView>
-                            <MaterialIcons style={styles.iconInput}name="email" size={18} color="black" />
-                            <TextInput style={styles.input} 
-                            placeholder="| Email"
-                            keyboardType='email-address'
-                            autoComplete='email'
-                            value={email}
-                            onChangeText={setEmail}
-                            />
-                        </InputView>
+                        <Input>
+                            <Input.Icon icon = {IconMail}/>
+                            <Input.Title
+                                placeholder="| Email"
+                                keyboardType='email-address'
+                                autoComplete='email'
+                                value={email}
+                                onChangeText={setEmail}
+                            ></Input.Title>
+                        </Input>
                         
-                        <Button  style={{width:'35%'}} onPress={solicitarRedefinicaoSenha}>
+                        <Button  style={{marginTop:'25%'}} onPress={solicitarRedefinicaoSenha}>
                             <Button.Title>Enviar</Button.Title>
                         </Button>
                         
                         <TXTOptions
                         title1=''
                         title2='Voltar'
-                        style={{alignSelf:'center',paddingRight:'18%'}}
+                        style={{alignSelf:'center',marginRight:'14%'}}
                         onPress={()=>router.push('/')}
                         />
                     </View>

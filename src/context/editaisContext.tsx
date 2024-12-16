@@ -1,12 +1,12 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-type Prazo = {
+export type Prazo = {
     id_edital: string;
     descricao: string;
     data: string;
 };
 
-type Edital = {
+export type Edital = {
     id: string;
     nucleo: string;
     link1: string;

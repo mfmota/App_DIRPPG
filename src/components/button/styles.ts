@@ -1,6 +1,5 @@
 import {StyleSheet} from "react-native"
 import { fontFamily } from '@/styles/font-family';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 export const s = StyleSheet.create({
 

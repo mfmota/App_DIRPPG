@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Text,View,SafeAreaView, Pressable,Alert} from 'react-native'
 import{styles} from "./styles"
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {useRouter} from 'expo-router'
 import { Button } from '@/components/button';
@@ -20,8 +21,9 @@ export default function Login(){
     const [loading, setLoading] = useState(false);
  
     const userLogin = async () => {
-        
+    
         try {
+       
             setLoading(true);
             
             const response = await api.post("/usuarios/login", {
@@ -35,7 +37,7 @@ export default function Login(){
             await SecureStore.setItemAsync('id', usuario.id.toString());
             await SecureStore.setItemAsync('nome', usuario.nome);
             await SecureStore.setItemAsync('email', usuario.email);
-                    
+         
             router.push('/(tabs)/calendario');
 
         } catch (error) {
