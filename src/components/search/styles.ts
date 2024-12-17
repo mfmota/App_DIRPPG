@@ -26,7 +26,7 @@ export const s = StyleSheet.create({
     },
     boxTop:{
         justifyContent:'center',
-        width:'100%',
+        width:'97%',
     },
     iconAgenda:{
         marginRight:'5%',

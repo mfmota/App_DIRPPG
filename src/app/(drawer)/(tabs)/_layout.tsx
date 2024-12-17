@@ -26,17 +26,17 @@ export default function TabLayout() {
             tabBarActiveTintColor: '#1e39be',
           }}>
           <Tabs.Screen
-            name="calendario"
+            name="editais"
             options={{
-              title: 'Calendario',
-              tabBarIcon: ({}) =>  <AntDesign name="calendar" size={24} color="black" />,
+              title: 'Editais',
+              tabBarIcon: ({}) =>  <AntDesign name="filetext1" size={24} color="black"/>,
             }}
           />
           <Tabs.Screen
-            name="prazos"
+            name="calendario"
             options={{
-              title: 'Prazos',
-              tabBarIcon: ({}) =>  <AntDesign name="clockcircleo" size={24} color="black" />,
+              title: 'Calendário',
+              tabBarIcon: ({}) =>  <AntDesign name="calendar" size={24} color="black" />,
             }}
           />
         </Tabs>

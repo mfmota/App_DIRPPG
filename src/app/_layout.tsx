@@ -23,8 +23,6 @@ export default function Layout (){
         return <Loading/>
     }
 
-    console.log('Fonts Loaded:', fontsLoaded);
-
     return (
         <SafeAreaProvider>
             <Stack

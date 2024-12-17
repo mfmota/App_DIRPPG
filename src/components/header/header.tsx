@@ -22,7 +22,7 @@ export const Header = () =>{
 const styles = StyleSheet.create({
     view: {
         width: '100%',
-        height:'8%',
+        height:'9%',
         flexDirection:'row',
         alignItems:'center',
         backgroundColor:'white',

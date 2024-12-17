@@ -6,7 +6,6 @@ SplashScreen.preventAutoHideAsync();
 
 export const styles = StyleSheet.create({
 
-//-------------------------Geral-------------------------
     boxTop:{
         justifyContent:'center',
         width:'100%',
@@ -40,7 +39,6 @@ export const styles = StyleSheet.create({
 
     },
 
-//--------------------------------Index-----------------------------------
     
     txtLogin:{
         fontSize:20,
@@ -59,7 +57,6 @@ export const styles = StyleSheet.create({
          fontFamily:fontFamily.extra_bold
      },
  
- //---------------------------------Redef Senha--------------------------------------------------------
 
      txt1:{
         fontFamily:fontFamily.extra_bold,
@@ -75,84 +72,19 @@ export const styles = StyleSheet.create({
         marginBottom:'10%',
         alignSelf:'center',
      },
- 
-//--------------------------------------AGENDA-----------------------------------------------------------------
 
-    dropdown: {
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        marginTop:10,
-        padding:10,
+    calendar:{
+        backgroundColor:"transparent",
+        padding:24
     },
-
-    filterText: {
-        fontFamily:fontFamily.regular,
-        fontSize: 12,
-     },
-     
-     dropdownItem: {
-         padding: 10,
-         borderBottomWidth: 1,
-         borderBottomColor: '#ddd',
-     },
-     dropdownItemLink: {
-        padding: 10,
-        
-    },
-
-    dropdownLink:{
-        color:'blue',
-        padding:10.,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    },
-
-    txtData:{
-        fontFamily:fontFamily.semiBold,
-        fontSize:10,
-    },
-
-    txtEvento:{
-        fontFamily:fontFamily.bold,
-        fontSize:12,
-    },
-
-    item: {
-        padding:10,
-        marginBottom:20,
-        width:'90%',
-        alignSelf:'center',
-        alignContent:'center',
-        borderRadius:10,
-        borderColor:'#ddd',
-        borderBottomWidth:2
-    },
-
-    list:{
-        flexDirection:'row', 
-        justifyContent:'space-between'
-    },
-
-//--------------------------------------PRAZOS------------------------------------------------------- 
-
-    iconContainer:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 15,  
-    width: 22,         
-    height: 22,
-    overflow: 'hidden',
-    marginLeft: 'auto', 
-    },
-
-    prazosTitle:{
-        fontFamily:fontFamily.extra_bold,
-        alignSelf:'center',
-        textAlign:'center',
+    
+    containerCalendar:{
+        height:hp(10),
         width:'80%',
-        fontSize:22,
+        borderRadius:40,
+        alignContent:'center',
+        alignSelf:'center',
+        marginTop:15,
+       
     },
-
-
-
 })
