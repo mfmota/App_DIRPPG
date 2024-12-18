@@ -1,3 +1,4 @@
+import registerNNPushToken from 'native-notify';
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
 import * as SecureStore from 'expo-secure-store';
@@ -12,6 +13,8 @@ import { List } from '@/components/list';
 import { styles } from '@/app/styles';
 
 export default function Editais ()  {
+    registerNNPushToken(25409, '58VaIydpOLdS53SLK7B7ia');
+
     const {editais, setEditais} = useEditais();
     const [nucleos,setNucleos] = useState<number []>([]);
     const [userId, setUserId] = useState<string | null>(null);
