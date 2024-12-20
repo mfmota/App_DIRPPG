@@ -1,20 +1,67 @@
 import React, { useState,useEffect} from 'react';
-import { View, SafeAreaView,Alert} from 'react-native';
+import { View, SafeAreaView,Text, FlatList} from 'react-native';
 import { styles} from "@/app/styles";
 import { Header } from '@/components/header/header';
 import { Background } from '@/components/Background';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
 import { Calendar,LocaleConfig } from 'react-native-calendars';
 import { ptBR } from '@/utils/CalendarConfig';
-import * as CalendarAPI from 'expo-calendar';
-import { useDays } from '@/context/daysContext';
+import { useDays} from '@/context/daysContext';
+import api from '@/utils/api';
+import * as SecureStore from 'expo-secure-store';
 
 LocaleConfig.locales["pt-br"] = ptBR
 LocaleConfig.defaultLocale = "pt-br"
 
 export default function Calendario ()  {
- 
+    
     const { day,setDay } = useDays();    
+    const [markedDays, setMarkedDays] = useState<{ [key: string]: any }>({});
+
+    useEffect(()=>{
+        
+        const fetchEventos= async () =>{
+            const id = await SecureStore.getItemAsync('id');
+            try {
+               const response =  await api.get('/eventos',{ params: { id: id } })
+               const evento  = response.data
+                if(evento.length > 0 ){
+                    setDay((prevDays) => [
+                        ...prevDays,
+                        ...evento.map((ev: any) => ({
+                            data: ev.data,
+                            descricao: ev.descricao,
+                            titulo: ev.titulo,
+                        })),
+                    ]); 
+                }
+               
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchEventos();
+    },[]);
+
+    
+    useEffect(() => {
+        
+        const newMarkedDays = day.reduce((acc, currentDay) => {
+            const formattedDate = new Date(currentDay.data).toISOString().split('T')[0];
+            acc[formattedDate] = { marked: true, dotColor: '#50cebb' };
+            return acc;
+        }, {} as { [key: string]: any });
+
+        setMarkedDays(newMarkedDays);
+    }, [day]);
+
+    const renderEventItem = ({ item }: { item: { data: string; descricao: string; titulo: string } }) => (
+        <View style={styles.eventItem}>
+            <Text style={styles.eventTitle}>{item.titulo}</Text>
+            <Text style={styles.eventDate}>{new Date(item.data).toLocaleDateString('pt-BR')}</Text>
+            <Text style={styles.eventDescription}>{item.descricao || "Sem descrição"}</Text>
+        </View>
+    );
 
     return(
         <SafeAreaView>
@@ -31,9 +78,22 @@ export default function Calendario ()  {
                                 textDisabledColor:'#717171'
                             }}
                             minDate={new Date().toDateString()}
-                            markedDates={day}
+                            markedDates={markedDays}
                         />
                     </View>
+                    <View style = {styles.listCalendar
+                    }>
+                        <FlatList
+                            data={day}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={renderEventItem}
+                            contentContainerStyle={styles.eventList}
+                            ListEmptyComponent={() => (
+                                <Text style={styles.noEventsText}>Nenhum evento salvo.</Text>
+                            )}
+                        />
+                    </View>
+                    
                 </ContainerDrawer>
 
             </Background>

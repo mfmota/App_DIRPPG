@@ -85,7 +85,7 @@ export default function Editais ()  {
                     ]);
                     const editais = editaisResponse.data;
                     const prazos = prazosResponse.data;
-    
+                    
                     const updatedEditais = editais.map((edital: Edital) => ({
                         ...edital,
                         prazos: prazos.filter((prazo: Prazo) => prazo.id_edital === edital.id),

@@ -3,8 +3,11 @@ import {s} from "./styles"
 import * as Calendar from 'expo-calendar';
 import {IconChevronDown} from "@tabler/icons-react-native"
 import {Edital} from '@/context/editaisContext';
-import { useEffect } from "react";
-import { useDays,Day } from "@/context/daysContext";
+import { useEffect, useState } from "react";
+import { useDays} from "@/context/daysContext";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import api from '@/utils/api';
+import * as SecureStore from 'expo-secure-store';
 
 type Props = {
     item:Edital,
@@ -14,7 +17,11 @@ type Props = {
 
 export function Iten({item,expanded,onToggleExpand}:Props){
 
-  const { day,setDay } = useDays();
+  const {day, setDay } = useDays();
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [currentEvent, setCurrentEvent] = useState<{ title: string, description: string } | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -24,23 +31,56 @@ export function Iten({item,expanded,onToggleExpand}:Props){
       }
     })();
   }, []);
-    
-  async function handleAddEvent(title: string, description: string, date: string) {
+  
+  
+  async function handleDateConfirm(date: Date) {
+    if (isProcessing) return; 
+    setIsProcessing(true);
+   
     try {
-        const calendarId = await createNewCalendar();
-        const startDate = new Date(date); 
-        const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); 
-        const eventId = await addEventToCalendar(calendarId);
-        const dados = {date,description,title}
-        //setDay(dados)
-            
+        if (!currentEvent) return;
 
-          Alert.alert('Evento criado!', `Evento "${title}" adicionado ao calendário.`);
+        const id = await SecureStore.getItemAsync('id');
+        const { title, description } = currentEvent;
+
+        const normalizedDate = new Date(date);
+        normalizedDate.setHours(0, 0, 0, 0);
+
+        const calendarId = await createNewCalendar();
+        const startDate = date;
+        const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+
+        await Calendar.createEventAsync(calendarId, {
+            title,
+            startDate,
+            endDate,
+            timeZone: 'America/Sao_Paulo',
+            location: 'Local padrão',
+            notes: description,
+        });
+
+        setDay((prevDays) => [
+            ...prevDays,
+            {  data: normalizedDate.toISOString(), descricao: description, titulo: title },
+        ]);
+
+        try{
+          await api.post('/eventos',{id_usuario:id,titulo:title,decricao:description,data:normalizedDate})
+          
+        }catch(error){
+          console.error('Erro ao salvar evento no banco',error);
+        }
+
+        Alert.alert('Evento criado!', `Evento "${title}" foi adicionado ao calendário e salvo no contexto.`);
     } catch (error) {
-          Alert.alert('Erro', "Erro ao criar o evento");
-    }
+        Alert.alert('Erro', 'Erro ao criar o evento');
+    } finally {
+      setIsProcessing(false);
+      setShowDatePicker(false);
+      setCurrentEvent(null);
   }
-    
+}
+
 
   return (
       <View style={s.item}>
@@ -67,7 +107,11 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                   <Text style={s.dropdownItem}>Cronograma:</Text>
                   {item.prazos[0] != null ? (
                       item.prazos.map((prazo, index) => (
-                          <TouchableOpacity key={index} onPress={() => handleAddEvent(item.titulo, prazo.descricao, prazo.data)}>
+                          <TouchableOpacity key={index} onPress={() => {
+                            setCurrentEvent({ title: item.titulo, description: prazo.descricao }); // Define o evento atual
+                            setShowDatePicker(true);
+                          }}
+                          >
                                   <Text key={index} style={s.dropdownItem}>
                                       {prazo.descricao}: {prazo.data}
                                   </Text>
@@ -79,9 +123,24 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                   )}
               </View>
           )}
+
+            {showDatePicker && (
+                <DateTimePicker
+                    value={selectedDate || new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(event, date) => {
+                        if (date) {
+                            setShowDatePicker(false);
+                            handleDateConfirm(date);
+                        } else {
+                            setShowDatePicker(false); // Fechar se o usuário cancelar
+                        }
+                    }}
+                />
+            )}
       </View>
   )
-
 
   async function getCalendarPermissions() {
     const { status } = await Calendar.requestCalendarPermissionsAsync();
@@ -115,17 +174,5 @@ export function Iten({item,expanded,onToggleExpand}:Props){
       return newCalendarID;
   }
       
-  async function addEventToCalendar(calendarId: string) {
-    const eventId = await Calendar.createEventAsync(calendarId, {
-      title: 'Reunião de Projeto',
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 60 * 60 * 1000),
-        timeZone: 'America/Sao_Paulo',
-        location: 'Online',
-    });
-      
-    return eventId;
-  }
-
 }
 

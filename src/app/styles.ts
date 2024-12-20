@@ -87,4 +87,44 @@ export const styles = StyleSheet.create({
         marginTop:15,
        
     },
+
+    eventList: {
+        padding: 16,
+    },
+    eventItem: {
+        backgroundColor: '#f9f9f9',
+        borderRadius: 8,
+        padding: 16,
+        marginBottom: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 1.41,
+        elevation: 2,
+    },
+    eventTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    eventDate: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 4,
+    },
+    eventDescription: {
+        fontSize: 14,
+        color: '#444',
+        marginTop: 8,
+    },
+    noEventsText: {
+        textAlign: 'center',
+        color: '#aaa',
+        fontSize: 16,
+        marginTop: 16,
+    },
+    listCalendar:{
+        flex:1,
+        marginTop:'70%'
+    }
 })
