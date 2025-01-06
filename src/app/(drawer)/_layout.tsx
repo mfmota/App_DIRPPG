@@ -5,6 +5,7 @@ import React from 'react';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import {useFonts, Montserrat_800ExtraBold, Montserrat_600SemiBold, Montserrat_700Bold,Montserrat_400Regular } from "@expo-google-fonts/montserrat"
 import { Loading } from "@/components/loading";
@@ -47,6 +48,17 @@ export default function DrawerLayout (){
             drawerLabelStyle:{fontFamily:'Montserrat_600SemiBold'},
             drawerIcon: ({}) => (
               <AntDesign name="earth" size={24} color="black" />
+            ),
+          }}
+        />
+
+        <Drawer.Screen
+          name="portaria"
+          options={{
+            drawerLabel:'Portaria',
+            drawerLabelStyle:{fontFamily:'Montserrat_600SemiBold'},
+            drawerIcon: ({}) => (
+              <MaterialCommunityIcons name="police-badge-outline" size={24} color="black" />
             ),
           }}
         />

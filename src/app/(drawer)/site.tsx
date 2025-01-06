@@ -10,7 +10,9 @@ export default function site(){
         <SafeAreaView>
             <Background>
                 <Header/>
-                 <Site/>
+                 <Site
+                 source='https://www.utfpr.edu.br/estrutura/pesquisa-e-pos-graduacao/dirppg/curitiba'
+                 />
             </Background>
         </SafeAreaView>
 

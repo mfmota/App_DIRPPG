@@ -3,12 +3,16 @@ import {WebView} from 'react-native-webview';
 
 import {s} from "./styles"
 
-export function Site (){
+type Props = {
+    source:string;
+}
+
+export function Site ({source}:Props){
 
     return(
         <View style={s.container}>
             <WebView
-                source={{uri:'https://www.utfpr.edu.br/estrutura/pesquisa-e-pos-graduacao/dirppg/curitiba'}}
+                source={{uri:source}}
                 startInLoadingState={true}
                 style={{ flex: 1 }}
                 renderLoading={() => (

@@ -90,6 +90,7 @@ export default function Perfil() {
                 for (const nucleo of nucleosParaAdicionar) {
                     const idNucleo = parseInt(nucleo); 
                     try {
+                        console.log(id,idNucleo)
                         await api.post("/usuarios_nucleos", {usuario_id: id,nucleo_id: idNucleo,});
                     } catch (error) {
                         console.error("Erro ao cadastrar nucleo_usuario:", error);
@@ -99,8 +100,11 @@ export default function Perfil() {
             if(nucleosParaRemover.length > 0){
                 for (const nucleo of nucleosParaRemover) {
                     const idNucleo = parseInt(nucleo);
+                    console.log('Tentando remover associação:', { usuario_id: id, nucleo_id: idNucleo });
+
                     try {
-                        await api.delete("/usuarios_nucleos", { data: { usuario_id: id, nucleo_id: idNucleo } });
+                        if(id!==null )
+                        await api.delete("/usuarios_nucleos", { data: { usuario_id: parseInt(id), nucleo_id: idNucleo} });
                     } catch (error) {
                         console.error("Erro ao remover nucleo_usuario:", error);
                     }

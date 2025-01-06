@@ -5,7 +5,7 @@ import { Image, ImageStyle } from 'expo-image';
 import { heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 interface FooterProps {
-    style?: ImageStyle; // Prop opcional para receber estilos adicionais
+    style?: ImageStyle; 
   }
 
 export const Footer : React.FC<FooterProps> = (props) =>  {
