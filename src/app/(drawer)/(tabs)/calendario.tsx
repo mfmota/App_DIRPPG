@@ -1,6 +1,7 @@
 import React, { useState,useEffect} from 'react';
-import { View, SafeAreaView,Text, FlatList} from 'react-native';
+import { View, SafeAreaView,Text, FlatList,TouchableOpacity} from 'react-native';
 import { styles} from "@/app/styles";
+import {IconTrash} from "@tabler/icons-react-native"
 import { Header } from '@/components/header/header';
 import { Background } from '@/components/Background';
 import { ContainerDrawer } from '@/components/ContainerDrawer';
@@ -17,6 +18,10 @@ export default function Calendario ()  {
     
     const { day,setDay } = useDays();    
     const [markedDays, setMarkedDays] = useState<{ [key: string]: any }>({});
+    const [selectedMonth, setSelectedMonth] = useState<{ month: number; year: number }>({
+        month: new Date().getMonth() + 1,
+        year: new Date().getFullYear(),
+    });
 
     useEffect(()=>{
         
@@ -32,8 +37,9 @@ export default function Calendario ()  {
                             data: ev.data,
                             descricao: ev.descricao,
                             titulo: ev.titulo,
+                            id: ev.id,
                         })),
-                    ]); 
+                    ]);     
                 }
                
             } catch (error) {
@@ -55,11 +61,42 @@ export default function Calendario ()  {
         setMarkedDays(newMarkedDays);
     }, [day]);
 
-    const renderEventItem = ({ item }: { item: { data: string; descricao: string; titulo: string } }) => (
+    const filteredEvents = day.filter((event) => {
+        const eventDate = new Date(event.data);
+        return (
+            eventDate.getMonth() + 1 === selectedMonth.month &&
+            eventDate.getFullYear() === selectedMonth.year
+        );
+    });
+
+    async function deleteEvent(id:number ) {
+        if (!id) {
+            console.error("ID inválido para exclusão.");
+            return;
+        }
+        try {
+            await api.delete("/eventos", {data:{id:id}});
+            setDay((prevDays) => prevDays.filter((event) => event.id !== id));
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Erro ao excluir evento:", {
+                    message: error.message,
+                });
+            }
+        }
+    }
+
+    const renderEventItem = ({ item }: { item: { data: string; descricao: string; titulo: string,id:number } }) => (
         <View style={styles.eventItem}>
             <Text style={styles.eventTitle}>{item.titulo}</Text>
             <Text style={styles.eventDate}>{new Date(item.data).toLocaleDateString('pt-BR')}</Text>
             <Text style={styles.eventDescription}>{item.descricao || "Sem descrição"}</Text>
+            <View style={{alignSelf:'flex-end'}}>
+                <TouchableOpacity onPress={() => deleteEvent(item.id)}>
+                    <IconTrash size={24} color="black"/>
+                </TouchableOpacity>
+            </View>
+            
         </View>
     );
 
@@ -79,12 +116,14 @@ export default function Calendario ()  {
                             }}
                             minDate={new Date().toDateString()}
                             markedDates={markedDays}
+                            onMonthChange={(date: { year: number; month: number; day: number }) => {
+                                setSelectedMonth({ month: date.month, year: date.year });
+                            }}
                         />
                     </View>
-                    <View style = {styles.listCalendar
-                    }>
+                    <View style = {styles.listCalendar}>
                         <FlatList
-                            data={day}
+                            data={filteredEvents}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={renderEventItem}
                             contentContainerStyle={styles.eventList}

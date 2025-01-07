@@ -23,7 +23,11 @@ export default function recuperarSenha(){
             alert(response.data.mensagem); 
             router.push('/'); 
         } catch (error) {
-            console.log('Erro ao solicitar redefinição de senha: ' + error);
+            if (error instanceof Error) {
+                console.error("Erro ao enviar email:", {
+                    message: error.message,
+                });
+            }
         }
     }
 
@@ -31,7 +35,7 @@ export default function recuperarSenha(){
         <SafeAreaView>
             <Background>
                 <Container>
-                    <View style={[styles.boxTop,{marginTop:'20%',marginBottom:'10%'}]}>
+                    <View style={[styles.boxTop,{marginTop:20,marginBottom:'10%'}]}>
                         <Text style={styles.title} >DIRPPG-CT</Text>  
                         <Text style={styles.subTitle}>Diretoria de Pesquisa e Pós-Graduação</Text>             
                     </View>

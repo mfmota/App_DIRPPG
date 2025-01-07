@@ -61,7 +61,7 @@ export function Iten({item,expanded,onToggleExpand}:Props){
 
         setDay((prevDays) => [
             ...prevDays,
-            {  data: normalizedDate.toISOString(), descricao: description, titulo: title },
+            {  data: normalizedDate.toISOString(), descricao: description, titulo: title, id:0 },
         ]);
 
         try{

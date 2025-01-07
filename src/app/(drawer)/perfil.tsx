@@ -100,8 +100,6 @@ export default function Perfil() {
             if(nucleosParaRemover.length > 0){
                 for (const nucleo of nucleosParaRemover) {
                     const idNucleo = parseInt(nucleo);
-                    console.log('Tentando remover associação:', { usuario_id: id, nucleo_id: idNucleo });
-
                     try {
                         if(id!==null )
                         await api.delete("/usuarios_nucleos", { data: { usuario_id: parseInt(id), nucleo_id: idNucleo} });
