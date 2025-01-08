@@ -59,13 +59,17 @@ export function Iten({item,expanded,onToggleExpand}:Props){
             notes: description,
         });
 
-        setDay((prevDays) => [
-            ...prevDays,
-            {  data: normalizedDate.toISOString(), descricao: description, titulo: title, id:0 },
-        ]);
-
         try{
-          await api.post('/eventos',{id_usuario:id,titulo:title,decricao:description,data:normalizedDate})
+          console.log(description)
+          const response = await api.post('/eventos',{id_usuario:id,titulo:title,descricao:description,data:normalizedDate})
+
+          const eventoCriado = response.data
+          console.log(eventoCriado)
+          
+          setDay((prevDays) => [
+            ...prevDays,
+            {  data: normalizedDate.toISOString(), descricao: description, titulo: title, id:eventoCriado.id },
+          ]);
           
         }catch(error){
           console.error('Erro ao salvar evento no banco',error);
@@ -108,7 +112,7 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                   {item.prazos[0] != null ? (
                       item.prazos.map((prazo, index) => (
                           <TouchableOpacity key={index} onPress={() => {
-                            setCurrentEvent({ title: item.titulo, description: prazo.descricao }); // Define o evento atual
+                            setCurrentEvent({ title: item.titulo, description: prazo.descricao });
                             setShowDatePicker(true);
                           }}
                           >
