@@ -1,7 +1,7 @@
 import {View,TouchableOpacity,Text,Linking,Alert,Platform} from "react-native"
 import {s} from "./styles"
 import * as Calendar from 'expo-calendar';
-import {IconChevronDown} from "@tabler/icons-react-native"
+import {IconChevronDown,IconClock} from "@tabler/icons-react-native"
 import {Edital} from '@/context/editaisContext';
 import { useEffect, useState } from "react";
 import { useDays} from "@/context/daysContext";
@@ -115,10 +115,16 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                             setCurrentEvent({ title: item.titulo, description: prazo.descricao });
                             setShowDatePicker(true);
                           }}
-                          >
-                                  <Text key={index} style={s.dropdownItem}>
-                                      {prazo.descricao}: {prazo.data}
-                                  </Text>
+                          >   
+                          <View style={[s.dropdownItem, { flexDirection: 'row', alignItems: 'center' }]}>
+                              <View style={{ marginRight: 8 }}>
+                                  <IconClock size={20} color="black" />
+                              </View>
+                              <Text style={{ flex: 1 }}>
+                                  {prazo.descricao}: {prazo.data}
+                              </Text>
+                          </View>
+         
                           </TouchableOpacity>
                            
                       ))
@@ -134,8 +140,8 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                     mode="date"
                     display="default"
                     onChange={(event, date) => {
-                        if (date) {
-                            setShowDatePicker(false);
+                        if (event.type ==="set" && date) {
+                          setShowDatePicker(false); 
                             handleDateConfirm(date);
                         } else {
                             setShowDatePicker(false); // Fechar se o usuário cancelar

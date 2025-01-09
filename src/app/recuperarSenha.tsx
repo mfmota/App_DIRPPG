@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Text,View,SafeAreaView} from 'react-native';
+import React, {useState,} from 'react';
+import {Text,View,SafeAreaView,Alert} from 'react-native';
 import{styles} from "./styles";
 import { useRouter } from 'expo-router';
 import {IconMail} from "@tabler/icons-react-native"
@@ -20,10 +20,11 @@ export default function recuperarSenha(){
     async function solicitarRedefinicaoSenha() {
         try {
             const response = await api.post("/request", { email:email });
-            alert(response.data.mensagem); 
+            Alert.alert('Sucesso', 'O email para redefinir sua senha foi enviado!'); 
             router.push('/'); 
         } catch (error) {
             if (error instanceof Error) {
+                Alert.alert('Falha', 'Falha ao enviar email para redefinir senha!');
                 console.error("Erro ao enviar email:", {
                     message: error.message,
                 });

@@ -125,6 +125,6 @@ export const styles = StyleSheet.create({
     },
     listCalendar:{
         flex:1,
-        marginTop:'70%'
+        marginTop:'80%'
     }
 })

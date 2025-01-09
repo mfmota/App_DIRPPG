@@ -10,6 +10,7 @@ import { ptBR } from '@/utils/CalendarConfig';
 import { useDays} from '@/context/daysContext';
 import api from '@/utils/api';
 import * as SecureStore from 'expo-secure-store';
+import EventForm from '@/components/eventForm';
 
 LocaleConfig.locales["pt-br"] = ptBR
 LocaleConfig.defaultLocale = "pt-br"
@@ -22,6 +23,7 @@ export default function Calendario ()  {
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
     });
+    
 
     useEffect(()=>{
         
@@ -68,7 +70,7 @@ export default function Calendario ()  {
             eventDate.getFullYear() === selectedMonth.year
         );
     });
-
+    
     async function deleteEvent(id:number ) {
         if (!id) {
             console.error("ID inválido para exclusão.");
@@ -120,7 +122,9 @@ export default function Calendario ()  {
                                 setSelectedMonth({ month: date.month, year: date.year });
                             }}
                         />
+                       <EventForm/>
                     </View>
+                    
                     <View style = {styles.listCalendar}>
                         <FlatList
                             data={filteredEvents}
