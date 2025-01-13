@@ -12,6 +12,7 @@ export type Edital = {
     link1: string;
     link2: string;
     descricao: string;
+    updatedAt:Date,
     titulo: string;
     prazos: Prazo[];
 };

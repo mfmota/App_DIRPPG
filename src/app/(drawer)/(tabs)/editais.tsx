@@ -104,8 +104,11 @@ export default function Editais ()  {
         fetchEditais();
     }, [nucleos]);
     
-    const filteredEditais = editais.filter((edital) =>
-        edital.titulo.toLowerCase().includes(searchText.toLowerCase())
+    const filteredEditais = editais
+        .filter((edital) => 
+            edital.titulo.toLowerCase().includes(searchText.toLowerCase())
+        )
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     );
     
     return (
@@ -113,7 +116,8 @@ export default function Editais ()  {
             <Background>
                 <Header/>
                 <ContainerDrawer style={{ paddingBottom:20  }}>
-                    <Search>
+                    <Search
+                    onFiltroChange={(selecionados) => setNucleos(selecionados)}>
                         <Search.Inp
                             value={searchText}
                             onChangeText={(t) => setSearchText(t)}/>
