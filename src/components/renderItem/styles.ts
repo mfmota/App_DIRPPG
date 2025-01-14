@@ -38,7 +38,7 @@ dropdown: {
 
     txtEvento:{
         fontFamily:fontFamily.bold,
-        fontSize:12,
+        fontSize:14,
     },
 
     item: {

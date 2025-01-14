@@ -22,6 +22,7 @@ export default function Editais ()  {
     const [loading, setLoading] = useState<boolean>(false); 
     const [updateFlag, setUpdateFlag] = useState<boolean>(false);
     const [searchText, setSearchText] = useState<string>('');
+    const [nucleoPadrao, setNucleoPadrao] = useState<number []>([]);
 
     useEffect(() => {
         const onUpdateFlagChanged = (flag: boolean) => {
@@ -51,6 +52,7 @@ export default function Editais ()  {
                 }
                 else if (cachedNucleos) {
                     setNucleos(JSON.parse(cachedNucleos));
+                    setNucleoPadrao(JSON.parse(cachedNucleos));
                 } else if (id) {
                     const numericUserId = parseInt(id, 10);
                     const responseNucleos = await api.get('/usuarios_nucleos', { params: { usuario_id: numericUserId } });
@@ -110,13 +112,14 @@ export default function Editais ()  {
         )
         .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     );
-    
+  
     return (
         <SafeAreaView>
             <Background>
                 <Header/>
                 <ContainerDrawer style={{ paddingBottom:20  }}>
                     <Search
+                    meusNucleos={nucleoPadrao}
                     onFiltroChange={(selecionados) => setNucleos(selecionados)}>
                         <Search.Inp
                             value={searchText}

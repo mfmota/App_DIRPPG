@@ -1,5 +1,6 @@
 import { StyleSheet} from "react-native"
 import { fontFamily } from '@/styles/font-family';
+import { IconBorderRadius } from "@tabler/icons-react-native";
 
 export const s = StyleSheet.create({    
     buscaContainer: {
@@ -48,22 +49,32 @@ export const s = StyleSheet.create({
         width:'30%',
         marginTop:100,
         marginRight:30,
-        borderRadius:40,
+        borderRadius:10,
+        borderWidth:1,
+        backgroundColor: 'white',
+        borderColor:'#ddd'
 
+    },
+    selected:{
+        color:'#007aff'
     },
     modalItem: {
         padding: 16,
         backgroundColor: 'white',
         borderBottomWidth: 1,
         borderColor: '#ddd',
+        fontFamily:fontFamily.regular,
+        borderRadius:10
     },
     close:{
         padding:3,
-        borderRadius:5,
+        borderRadius:10,
+        backgroundColor:'white'
     },
     txt:{
         fontFamily:fontFamily.bold,
-        fontSize:16
+        fontSize:16,
+        padding:5
     } 
 
 })

@@ -3,7 +3,7 @@ import {View,TextInput,TextInputProps,TouchableOpacity,Modal,FlatList,Text} from
 import {IconSearch,IconFilter} from "@tabler/icons-react-native"
 import {s} from "./styles"
 
-const nucleosDisponiveis = [
+const nucleosDisponiveis:Nucleo[] = [
     { id: 1, name: 'DIRPPG-CT' },
     { id: 2, name: 'PROPPG' },
     { id: 3, name: 'CPGEI' },
@@ -30,25 +30,47 @@ const nucleosDisponiveis = [
     { id: 24, name: 'PPGPGP'},
 ]
 
+interface Nucleo {
+    id: number | number[];
+    name: string;
+    isHeader?: boolean;
+}
+
 interface SearchProps {
+    meusNucleos: number[];
     onFiltroChange: (nucleosSelecionados: number[]) => void;
     children?: React.ReactNode;
 }
 
-function Search({onFiltroChange, children }: SearchProps){
+function Search  ({meusNucleos,onFiltroChange, children }: SearchProps) {
+  
+    const nucleosAtualizados: Nucleo[] = [
+        { id: meusNucleos, name: 'Meus Núcleos', isHeader: true },
+        ...nucleosDisponiveis,
+    ];
+
     const [modalVisible, setModalVisible] = useState(false);
     const [selecionados, setSelecionados] = useState<number[]>([]);
 
     const filterOn = () => {
+        setSelecionados([]);
         setModalVisible(!modalVisible)
     }
 
-    const toggleNucleo = (id: number) => {
-        const novosSelecionados = selecionados.includes(id)
-            ? selecionados.filter((nucleoId) => nucleoId !== id)
-            : [...selecionados, id];
-        setSelecionados(novosSelecionados);
-        onFiltroChange(novosSelecionados);
+    const toggleNucleo = (id: number|number[]) => {
+        if (Array.isArray(id)) {
+            const novosSelecionados = selecionados.some((nucleoId) => id.includes(nucleoId))
+                ? selecionados.filter((nucleoId) => !id.includes(nucleoId)) 
+                : [...selecionados, ...id]; 
+            setSelecionados(novosSelecionados);
+            onFiltroChange(novosSelecionados);
+        } else {
+            const novosSelecionados = selecionados.includes(id)
+                ? selecionados.filter((nucleoId) => nucleoId !== id)
+                : [...selecionados, id]; 
+            setSelecionados(novosSelecionados);
+            onFiltroChange(novosSelecionados);
+        }
     };
 
     return (
@@ -73,19 +95,27 @@ function Search({onFiltroChange, children }: SearchProps){
             >
                 <View style={s.modalContainer}>
                     <FlatList
-                        data={nucleosDisponiveis}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
+                        data={nucleosAtualizados}
+                        keyExtractor={(item, index) => `${item.id}-${index}`}
+                        renderItem={({ item }) => {
+
+                            const isSelected = Array.isArray(item.id)
+                                ? item.id.every((id) => selecionados.includes(id)) // Verifica se todos os IDs do grupo estão selecionados
+                                : selecionados.includes(item.id as number);
+                            return(
+                                <TouchableOpacity
                                 style={[
-                                    s.modalItem,
-                                    selecionados.includes(item.id) && s.modalItem,
+                                    s.modalItem, // Estilo padrão
                                 ]}
-                                onPress={() => toggleNucleo(item.id)}
-                            >
-                                <Text>{item.name}</Text>
-                            </TouchableOpacity>
-                        )}
+                                onPress={() => {
+                                    toggleNucleo(item.id as number); 
+                                    
+                                }}
+                                >
+                                    <Text  style={isSelected ? s.selected : undefined}>{item.name}</Text>
+                                </TouchableOpacity>
+                            );
+                        }}
                     />
                     <TouchableOpacity
                         onPress={() => {setModalVisible(false), setSelecionados([])}}
