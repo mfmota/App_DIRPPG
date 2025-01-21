@@ -129,7 +129,7 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                            
                       ))
                   ) : (
-                      <Text style={s.dropdownItem}>Cronograma não encontrado</Text>
+                      <Text style={s.dropdownItem}>Cronograma não encontrado. Acesse o link do edital para mais informações</Text>
                   )}
               </View>
           )}
@@ -144,7 +144,7 @@ export function Iten({item,expanded,onToggleExpand}:Props){
                           setShowDatePicker(false); 
                             handleDateConfirm(date);
                         } else {
-                            setShowDatePicker(false); // Fechar se o usuário cancelar
+                            setShowDatePicker(false); 
                         }
                     }}
                 />
