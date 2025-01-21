@@ -61,16 +61,16 @@ O aplicativo funciona em conjunto com um código em Python, responsável por bus
       git clone <url-do-repositorio>
 
 3. Acesse o diretório do projeto:
-  ```bash
-    cd nome-do-projeto
+    ```bash
+      cd nome-do-projeto
 
 3. Instale as dependências:
-  ```bash
-    npm install
+    ```bash
+      npm install
 
 4. Inicie o projeto:
-  ```bash
-    expo start
+    ```bash
+      expo start
 
 Escaneie o QR Code com o aplicativo Expo Go (disponível na App Store e Google Play) ou execute em um emulador.
 
