@@ -12,6 +12,16 @@ O aplicativo funciona em conjunto com um código em Python, responsável por bus
 
 - Integração com o backend para acesso aos dados atualizados.
 
+## Telas
+
+<div style="justify-content: space-between">
+  <img src ="https://github.com/user-attachments/assets/cbed8e1f-ad0f-404c-b8b6-0a959e3be82e" width = "300px"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src ="https://github.com/user-attachments/assets/f6bc4cd0-868e-4234-97d4-8a7f9b80384f" width = "300px"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src ="https://github.com/user-attachments/assets/c9e76d28-e2ab-48b0-b3fd-5604b03c3370" width = "300px"/>
+</div>
+
 ## Tecnologias Utilizadas
 
 - React Native: Framework para desenvolvimento mobile.
