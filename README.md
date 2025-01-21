@@ -4,7 +4,7 @@ Este é um aplicativo mobile desenvolvido com React Native e Expo para atender a
 
 O aplicativo funciona em conjunto com um código em Python, responsável por buscar os editais diretamente do site da UTFPR Curitiba. Este repositório contém exclusivamente o código referente ao frontend do projeto, incluindo as telas e interações do aplicativo.
 
-O backend com a integração está disponível no repositório Back_App
+O backend com a integração está disponível no repositório Back_App.
 
 ## Funcionalidades
 
